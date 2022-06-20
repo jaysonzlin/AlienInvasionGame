@@ -1,3 +1,3 @@
 # AlienInvasionGame
 
-#Faithful recreation
+Recreation of Space Invaders with additions
