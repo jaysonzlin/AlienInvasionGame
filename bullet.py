@@ -1,4 +1,4 @@
-import pygame
+import pygame, time
 from pygame.sprite import Sprite
 
 class Bullet(Sprite):
@@ -12,6 +12,10 @@ class Bullet(Sprite):
 		self.settings = ai_game.settings
 		self.color = self.settings.bullet_color
 		
+		#Creating a timer for every bullet
+		self.clock = pygame.time.Clock()
+		self.current = time.time()
+		
 		#Create a bullet rect at (0,0) and then set correct position
 		self.rect = pygame.Rect(0,0,self.settings.bullet_width, self.settings.bullet_height)
 		self.rect.midtop = ai_game.ship.rect.midtop
@@ -22,8 +26,10 @@ class Bullet(Sprite):
 	def update(self):
 		'''Move the bullet up the screen'''
 		
-		#Update the decimal position of the bullet
-		self.y -= self.settings.bullet_speed
+		#Update the decimal position of the bullet every 0.5 milliseconds
+		if (time.time() - self.current) > 0.0005:	
+			self.y -= self.settings.bullet_speed
+			self.current = time.time()
 		
 		#Update the rect position.
 		self.rect.y = self.y

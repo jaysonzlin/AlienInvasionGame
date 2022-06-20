@@ -1,4 +1,4 @@
-import pygame
+import pygame, time
 from pygame.sprite import Sprite
 
 class Ship(Sprite):
@@ -12,13 +12,17 @@ class Ship(Sprite):
 		self.settings = ai_game.settings
 		self.screen_rect = ai_game.screen.get_rect()
 		
+		#Creating a timer for the ship's actions
+		self.clock = pygame.time.Clock()
+		self.current = time.time()
+		
 		#Load the ship image with its animations and get its rect
 		self.sprites = []
 		#self.sprites.append(pygame.image.load('images/shipno.bmp'))
 		#self.sprites.append(pygame.image.load('images/shipfire.bmp'))		
-		#self.sprites.append(pygame.image.load('images/shipglow.bmp'))
-		#self.sprites.append(pygame.image.load('images/shipblue.bmp'))
-		self.sprites.append(pygame.image.load('images/OGshippng.png'))
+		self.sprites.append(pygame.image.load('images/shipglow.bmp'))
+		self.sprites.append(pygame.image.load('images/shipblue.bmp'))
+		#self.sprites.append(pygame.image.load('images/OGshippng.png'))
 		
 		self.current_sprite = 0
 		self.image = self.sprites[self.current_sprite]
@@ -38,22 +42,26 @@ class Ship(Sprite):
 	def update(self, speed):
 		'''Update the ship's position based on the movement flag.'''
 		
-		#Update the ship's x value, not the rect
-		if self.moving_right and self.rect.right < self.screen_rect.right:
-			self.x += self.settings.ship_speed
+		#Updates position and sprite every 0.5 milliseconds
+		if (time.time() - self.current) > 0.0005:
 			
-		if self.moving_left and self.rect.left > 0:
-			self.x -= self.settings.ship_speed
+			#Update the ship's x value, not the rect
+			if self.moving_right and self.rect.right < self.screen_rect.right:
+				self.x += self.settings.ship_speed
 			
-		#Update rect object from self.x
-		self.rect.x = self.x
+			if self.moving_left and self.rect.left > 0:
+				self.x -= self.settings.ship_speed
+			
+			#Update rect object from self.x
+			self.rect.x = self.x
 		
-		#Animates the ship
-		self.current_sprite += speed
+			#Animates the ship
+			self.current_sprite += speed
 		
-		if self.current_sprite >= len(self.sprites):
-			self.current_sprite = 0
-					
+			if self.current_sprite >= len(self.sprites):
+				self.current_sprite = 0
+			
+			self.current = time.time()
 		self.image = self.sprites[int(self.current_sprite)]
 		self.image = pygame.transform.scale(self.image,(60,43))
 	

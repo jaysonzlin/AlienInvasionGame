@@ -1,4 +1,4 @@
-import pygame 
+import pygame, time
 from pygame.sprite import Sprite
 
 class Alien(Sprite):
@@ -9,6 +9,10 @@ class Alien(Sprite):
 		
 		super().__init__()
 		self.screen = ai_game.screen
+		
+		#Creates a timer for each alien sprite
+		self.clock = pygame.time.Clock()
+		self.current = time.time()
 		
 		#Load the alien image with animations and set its rect attribute
 		self.sprites = []
@@ -26,11 +30,14 @@ class Alien(Sprite):
 		#Store the alien's exact horizontal position
 		self.x = float(self.rect.x)
 		
-	def update(self, speed):
+	def update(self):
 		'''Animates the alien'''
 		
-		self.current_sprite += speed
-		
+		#Alien sprite updates every 350 milliseconds
+		if (time.time() - self.current) > 0.35:
+			self.current_sprite += 1
+			self.current = time.time()
+
 		if self.current_sprite >= len(self.sprites):
 			self.current_sprite = 0
 					
