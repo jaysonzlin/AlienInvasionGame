@@ -39,7 +39,7 @@ class Ship(Sprite):
 		self.moving_right = False
 		self.moving_left = False
 		
-	def update(self, speed):
+	def update(self):
 		'''Update the ship's position based on the movement flag.'''
 		
 		#Updates position and sprite every 0.5 milliseconds
@@ -56,7 +56,7 @@ class Ship(Sprite):
 			self.rect.x = self.x
 		
 			#Animates the ship
-			self.current_sprite += speed
+			self.current_sprite += 0.005
 		
 			if self.current_sprite >= len(self.sprites):
 				self.current_sprite = 0
