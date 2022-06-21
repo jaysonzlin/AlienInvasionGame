@@ -10,6 +10,7 @@ class Alien(Sprite):
 		super().__init__()
 		self.screen = ai_game.screen
 		self.settings = ai_game.settings
+		self.ship = ai_game.ship
 		
 		#Creates a timer for each alien sprite
 		self.clock = pygame.time.Clock()
@@ -36,9 +37,10 @@ class Alien(Sprite):
 		'''Moves and animates the alien'''
 			
 		#Alien movement
-		self.x += self.settings.alien_speed * self.settings.fleet_direction
-		self.rect.x = self.x
-		self.current = time.time()
+		if not self.ship.dead_check:
+			self.x += self.settings.alien_speed * self.settings.fleet_direction
+			self.rect.x = self.x
+			self.current = time.time()
 		
 		#Alien sprite updates every 350 milliseconds
 		if (time.time() - self.sprite_time) > 0.35:
@@ -121,8 +123,8 @@ class invader3(Alien):
 		self.lives = 3
 		
 		#Invader size
-		self.width = 60
-		self.height = 60
+		self.width = 50
+		self.height = 50
 		
 		#Load the alien image with animations and set its rect attribute
 		self.sprites = []
