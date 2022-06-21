@@ -1,8 +1,8 @@
-import sys, pygame
+import sys, pygame, time
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
-from alien import Alien
+from alien import Alien, invader1, invader2, invader3
 
 class AlienInvasion:
 	'''Overall class to manage game assets and behavior.'''
@@ -14,6 +14,9 @@ class AlienInvasion:
 		
 		#Importing settings
 		self.settings = Settings()
+		
+		#Round number
+		self.rd = 1
 		
 		#Fleet check implementation boolean
 		self.fleet_check = True
@@ -94,13 +97,43 @@ class AlienInvasion:
 		for bullet in self.bullets.copy():
 			if bullet.rect.bottom <= 0:
 				self.bullets.remove(bullet)
+		
+		#Respond to bullet-alien collisions
+		self._check_bullet_alien_collisions()
+	
+	def _check_bullet_alien_collisions(self):
+		'''Respond to bullet-alien collisions'''
+					
+		#Check for any bullets that have hit aliens
+		#If so, get rid of the bullet
+		#Each hit causes the alien to lose life points and removes alien is alien life points are 0
+		for alien in self.aliens:
+			col_i = pygame.sprite.spritecollide(alien, self.bullets, True)
+			if col_i:
+				alien.lives -= 1
+				if alien.lives <= 0:
+					alien.kill()
+		
+		if not self.aliens:
+			#Destroy existing bullets and create new fleet
+			self.bullets.empty()
+			time.sleep(0.05)
+			self.rd += 1
+			self._create_fleet()
 				
 	def _create_fleet(self):
 		'''Create the fleet of aliens'''
 		
 		#Create an alien and find the number of aliens in a row
+		#Different alien for different rounds
 		#Spacing between each alien is equal to one alien width
-		alien = Alien(self)
+		if self.rd == 1:
+			alien = invader1(self)
+		if self.rd == 2:
+			alien = invader2(self)
+		if self.rd == 3:
+			alien = invader3(self)
+			
 		alien_width, alien_height = alien.rect.size
 		
 		#Determine the number of aliens in a row
@@ -120,7 +153,13 @@ class AlienInvasion:
 	def _create_alien(self, alien_number, row_number):
 		'''Create an alien and place it in the row'''
 		
-		alien = Alien(self)
+		if self.rd == 1:
+			alien = invader1(self)
+		if self.rd == 2:
+			alien = invader2(self)
+		if self.rd == 3:
+			alien = invader3(self)
+			
 		alien_width, alien_height = alien.rect.size
 		alien.x = alien_width + 1.5 * alien_width * alien_number
 		alien.rect.x = alien.x

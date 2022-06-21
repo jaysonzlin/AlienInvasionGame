@@ -34,7 +34,7 @@ class Settings:
 		self.alien_spd_multi3 = 60.0
 		self.alien_spd_multi4 = 250.0
 		
-		self.fleet_drop_speed = 10
+		self.fleet_drop_speed = 20
 		
 		#fleet_direction of 1 represents right; -1 represents left
 		self.fleet_direction = 1

@@ -14,22 +14,6 @@ class Alien(Sprite):
 		#Creates a timer for each alien sprite
 		self.clock = pygame.time.Clock()
 		self.sprite_time = time.time()
-		
-		#Load the alien image with animations and set its rect attribute
-		self.sprites = []
-		self.sprites.append(pygame.image.load('images/invader1.bmp'))
-		self.sprites.append(pygame.image.load('images/invader1move.bmp'))
-		self.current_sprite = 0
-		self.image = self.sprites[self.current_sprite]
-		self.image = pygame.transform.scale(self.image,(60,43))
-		self.rect = self.image.get_rect()
-		
-		#Start each new alien near the top left of the screen
-		self.rect.x = 50
-		self.rect.y = 50
-		
-		#Store the alien's exact horizontal position
-		self.x = float(self.rect.x)
 	
 	def check_edges(self):
 		'''Return True if alien is at edge of screen'''
@@ -65,25 +49,34 @@ class Alien(Sprite):
 			self.current_sprite = 0
 					
 		self.image = self.sprites[int(self.current_sprite)]
-		self.image = pygame.transform.scale(self.image,(60,43))
+		self.image = pygame.transform.scale(self.image,(self.width, self.height))
 		
 #Work in progress to make three different alien classes		
-'''class invader1(Alien):
+class invader1(Alien):
 	
 	def __init__(self, ai_game):
+		'''Initializes an instance of invader1'''
 		
 		super().__init__(ai_game)
 		
+		#Hits needed to kill invader1
+		self.lives = 1
+		
+		#Invader size
+		self.width = 60
+		self.height = 43
+		
+		#Load the alien image with animations and set its rect attribute
 		self.sprites = []
 		self.sprites.append(pygame.image.load('images/invader1.bmp'))
 		self.sprites.append(pygame.image.load('images/invader1move.bmp'))
 		self.current_sprite = 0
 		self.image = self.sprites[self.current_sprite]
-		self.image = pygame.transform.scale(self.image,(60,43))
+		self.image = pygame.transform.scale(self.image,(self.width,self.height))
 		self.rect = self.image.get_rect()
 		
-		self.rect.x = self.rect.width
-		self.rect.y = self.rect.height
+		self.rect.x = 50
+		self.rect.y = 50
 		
 		#Store the alien's exact horizontal position
 		self.x = float(self.rect.x)
@@ -91,19 +84,28 @@ class Alien(Sprite):
 class invader2(Alien):
 	
 	def __init__(self, ai_game):
+		'''Initializes an instance of invader2'''
 		
 		super().__init__(ai_game)
 		
+		#Hits needed to kill invader2
+		self.lives = 2
+		
+		#Invader size
+		self.width = 43
+		self.height = 43
+		
+		#Load the alien image with animations and set its rect attribute
 		self.sprites = []
 		self.sprites.append(pygame.image.load('images/invader2.bmp'))
 		self.sprites.append(pygame.image.load('images/invader2move.bmp'))
 		self.current_sprite = 0
 		self.image = self.sprites[self.current_sprite]
-		self.image = pygame.transform.scale(self.image,(43,43))
+		self.image = pygame.transform.scale(self.image,(self.width,self.height))
 		self.rect = self.image.get_rect()
 		
-		self.rect.x = self.rect.width
-		self.rect.y = self.rect.height
+		self.rect.x = 50
+		self.rect.y = 50
 		
 		#Store the alien's exact horizontal position
 		self.x = float(self.rect.x)
@@ -111,19 +113,28 @@ class invader2(Alien):
 class invader3(Alien):
 	
 	def __init__(self, ai_game):
+		'''Initializes an instance of invader3'''
 		
 		super().__init__(ai_game)
 		
+		#Hits needed to kill invader3
+		self.lives = 3
+		
+		#Invader size
+		self.width = 60
+		self.height = 60
+		
+		#Load the alien image with animations and set its rect attribute
 		self.sprites = []
 		self.sprites.append(pygame.image.load('images/invader3.bmp'))
 		self.sprites.append(pygame.image.load('images/invader3move.bmp'))
 		self.current_sprite = 0
 		self.image = self.sprites[self.current_sprite]
-		self.image = pygame.transform.scale(self.image,(60,60))
+		self.image = pygame.transform.scale(self.image,(self.width,self.height))
 		self.rect = self.image.get_rect()
 		
-		self.rect.x = self.rect.width
-		self.rect.y = self.rect.height
+		self.rect.x = 50
+		self.rect.y = 50
 		
 		#Store the alien's exact horizontal position
-		self.x = float(self.rect.x)'''
+		self.x = float(self.rect.x)
