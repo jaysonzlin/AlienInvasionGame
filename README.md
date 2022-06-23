@@ -2,6 +2,6 @@
 
 Recreation of Space Invaders with twists
 
-##Necessary Downloads
+## Necessary Downloads
 *python
 *pygame
