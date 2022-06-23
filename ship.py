@@ -26,9 +26,9 @@ class Ship(Sprite):
 		self.sprites = []
 		#self.sprites.append(pygame.image.load('images/shipno.bmp'))
 		#self.sprites.append(pygame.image.load('images/shipfire.bmp'))		
-		#self.sprites.append(pygame.image.load('images/shipglow.bmp'))
-		#self.sprites.append(pygame.image.load('images/shipblue.bmp'))
-		self.sprites.append(pygame.image.load('images/OGshippng.png'))
+		self.sprites.append(pygame.image.load('images/shipglow.bmp'))
+		self.sprites.append(pygame.image.load('images/shipblue.bmp'))
+		#self.sprites.append(pygame.image.load('images/OGshippng.png'))
 		#self.sprites.append(pygame.image.load('images/explosion.png'))
 		
 		self.current_sprite = 0

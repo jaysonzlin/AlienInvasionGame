@@ -12,6 +12,9 @@ class Alien(Sprite):
 		self.settings = ai_game.settings
 		self.ship = ai_game.ship
 		
+		#Hits needed to kill alien
+		self.lives = 1
+		
 		#Creates a timer for each alien sprite
 		self.clock = pygame.time.Clock()
 		self.sprite_time = time.time()
@@ -37,10 +40,9 @@ class Alien(Sprite):
 		'''Moves and animates the alien'''
 			
 		#Alien movement
-		if not self.ship.dead_check:
-			self.x += self.settings.alien_speed * self.settings.fleet_direction
-			self.rect.x = self.x
-			self.current = time.time()
+		self.x += self.settings.alien_speed * self.settings.fleet_direction
+		self.rect.x = self.x
+		self.current = time.time()
 		
 		#Alien sprite updates every 350 milliseconds
 		if (time.time() - self.sprite_time) > 0.35:
@@ -61,9 +63,6 @@ class invader1(Alien):
 		
 		super().__init__(ai_game)
 		
-		#Hits needed to kill invader1
-		self.lives = 1
-		
 		#Invader size
 		self.width = 60
 		self.height = 43
@@ -77,9 +76,6 @@ class invader1(Alien):
 		self.image = pygame.transform.scale(self.image,(self.width,self.height))
 		self.rect = self.image.get_rect()
 		
-		self.rect.x = 50
-		self.rect.y = 50
-		
 		#Store the alien's exact horizontal position
 		self.x = float(self.rect.x)
 		
@@ -89,9 +85,6 @@ class invader2(Alien):
 		'''Initializes an instance of invader2'''
 		
 		super().__init__(ai_game)
-		
-		#Hits needed to kill invader2
-		self.lives = 2
 		
 		#Invader size
 		self.width = 43
@@ -106,9 +99,6 @@ class invader2(Alien):
 		self.image = pygame.transform.scale(self.image,(self.width,self.height))
 		self.rect = self.image.get_rect()
 		
-		self.rect.x = 50
-		self.rect.y = 50
-		
 		#Store the alien's exact horizontal position
 		self.x = float(self.rect.x)
 		
@@ -118,9 +108,6 @@ class invader3(Alien):
 		'''Initializes an instance of invader3'''
 		
 		super().__init__(ai_game)
-		
-		#Hits needed to kill invader3
-		self.lives = 3
 		
 		#Invader size
 		self.width = 50
@@ -134,9 +121,6 @@ class invader3(Alien):
 		self.image = self.sprites[self.current_sprite]
 		self.image = pygame.transform.scale(self.image,(self.width,self.height))
 		self.rect = self.image.get_rect()
-		
-		self.rect.x = 50
-		self.rect.y = 50
 		
 		#Store the alien's exact horizontal position
 		self.x = float(self.rect.x)

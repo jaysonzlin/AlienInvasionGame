@@ -24,8 +24,23 @@ class AlienInvasion:
 		
 		#Round number
 		self.rd = 1
+		
+		#Counter for increasing alien lives
+		self.alien_up = 0
+		
 		#Prevents round increments due to empty screen from ship hits
 		self.rdcheck = True
+		
+		#Sound effects and volume
+		self.ship_death = pygame.mixer.Sound('sounds/ship_death.wav')
+		self.bullet_firing = pygame.mixer.Sound('sounds/bullet_firing.wav')
+		self.alien_pop = pygame.mixer.Sound('sounds/alien_pop.wav')
+		self.ufo_death = pygame.mixer.Sound('sounds/ufo_death.wav')
+		
+		#Background Music
+		pygame.mixer.music.load('sounds/bg_music.wav')
+		pygame.mixer.music.play(-1)
+		pygame.mixer.music.set_volume(0.3)
 		
 		#Fleet check implementation boolean
 		self.fleet_check = True
@@ -102,6 +117,7 @@ class AlienInvasion:
 		self.aliens.empty()
 		self.bullets.empty()
 		
+		pygame.mixer.Sound.play(self.ship_death)
 		self.ship.dead_check = True
 		self.rdcheck = False
 		self.death_timer = time()
@@ -112,6 +128,7 @@ class AlienInvasion:
 		if len(self.bullets) < self.settings.bullets_allowed:
 			new_bullet = Bullet(self)
 			self.bullets.add(new_bullet)
+			pygame.mixer.Sound.play(self.bullet_firing)
 			
 	def _update_bullets(self):
 		'''Update position of bullets and get rid of old bullets'''
@@ -134,10 +151,11 @@ class AlienInvasion:
 		#If so, get rid of the bullet
 		#Each hit causes the alien to lose life points and removes alien if alien life points are 0
 		for alien in self.aliens:
-			col_i = pygame.sprite.spritecollide(alien, self.bullets, True)
+			col_i = pygame.sprite.spritecollide(alien, self.bullets, self.settings.god_bullet_off)
 			if col_i:
 				alien.lives -= self.settings.bullet_power
 				if alien.lives <= 0:
+					pygame.mixer.Sound.play(self.alien_pop)
 					alien.kill()
 		
 		if not self.aliens and self.ship.dead_check == False:
@@ -146,6 +164,9 @@ class AlienInvasion:
 			sleep(0.05)
 			if self.rdcheck:
 				self.rd += 1 
+				#For every new round, add a life point to all aliens and increase their speed
+				self.alien_up += 1
+				self.settings.alien_spd_multi += 10
 			if not self.rdcheck:
 				self.ship.center_ship()
 			self._create_fleet()
@@ -157,11 +178,11 @@ class AlienInvasion:
 		#Create an alien and find the number of aliens in a row
 		#Different aliens for different rounds
 		#Spacing between each alien is equal to one alien width
-		if self.rd == 1:
+		if (self.rd % 3) == 1:
 			alien = invader1(self)
-		if self.rd == 2:
+		if (self.rd % 3) == 2:
 			alien = invader2(self)
-		if self.rd == 3:
+		if (self.rd % 3) == 0:
 			alien = invader3(self)
 			
 		alien_width, alien_height = alien.rect.size
@@ -186,17 +207,21 @@ class AlienInvasion:
 	def _create_alien(self, alien_number, row_number):
 		'''Create an alien and place it in the row'''
 		
-		if self.rd == 1:
+		if (self.rd % 3) == 1:
 			alien = invader1(self)
-		if self.rd == 2:
+			alien.lives += self.alien_up
+		if (self.rd % 3) == 2:
 			alien = invader2(self)
-		if self.rd == 3:
+			alien.lives += self.alien_up
+			print(self.settings.alien_spd_multi)
+		if (self.rd % 3) == 0:
 			alien = invader3(self)
+			alien.lives += self.alien_up
 			
 		alien_width, alien_height = alien.rect.size
 		alien.x = alien_width + 1.5 * alien_width * alien_number
 		alien.rect.x = alien.x
-		alien.rect.y = alien.rect.height + 1.5 * alien.rect.height * row_number
+		alien.rect.y = alien.rect.height + 1.5 * alien.rect.height * row_number + 25
 		self.aliens.add(alien)
 			
 	def _check_fleet_edges(self):
