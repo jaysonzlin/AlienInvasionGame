@@ -69,8 +69,8 @@ class invader1(Alien):
 		
 		#Load the alien image with animations and set its rect attribute
 		self.sprites = []
-		self.sprites.append(pygame.image.load('images/invader1.bmp'))
-		self.sprites.append(pygame.image.load('images/invader1move.bmp'))
+		self.sprites.append(pygame.image.load('images/invader1.png'))
+		self.sprites.append(pygame.image.load('images/invader1move.png'))
 		self.current_sprite = 0
 		self.image = self.sprites[self.current_sprite]
 		self.image = pygame.transform.scale(self.image,(self.width,self.height))
@@ -92,8 +92,8 @@ class invader2(Alien):
 		
 		#Load the alien image with animations and set its rect attribute
 		self.sprites = []
-		self.sprites.append(pygame.image.load('images/invader2.bmp'))
-		self.sprites.append(pygame.image.load('images/invader2move.bmp'))
+		self.sprites.append(pygame.image.load('images/invader2.png'))
+		self.sprites.append(pygame.image.load('images/invader2move.png'))
 		self.current_sprite = 0
 		self.image = self.sprites[self.current_sprite]
 		self.image = pygame.transform.scale(self.image,(self.width,self.height))
@@ -115,8 +115,8 @@ class invader3(Alien):
 		
 		#Load the alien image with animations and set its rect attribute
 		self.sprites = []
-		self.sprites.append(pygame.image.load('images/invader3.bmp'))
-		self.sprites.append(pygame.image.load('images/invader3move.bmp'))
+		self.sprites.append(pygame.image.load('images/invader3.png'))
+		self.sprites.append(pygame.image.load('images/invader3move.png'))
 		self.current_sprite = 0
 		self.image = self.sprites[self.current_sprite]
 		self.image = pygame.transform.scale(self.image,(self.width,self.height))

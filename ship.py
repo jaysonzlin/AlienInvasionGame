@@ -25,11 +25,10 @@ class Ship(Sprite):
 		#Load the ship image with its animations and get its rect
 		self.sprites = []
 		#self.sprites.append(pygame.image.load('images/shipno.bmp'))
-		#self.sprites.append(pygame.image.load('images/shipfire.bmp'))		
-		self.sprites.append(pygame.image.load('images/shipglow.bmp'))
-		self.sprites.append(pygame.image.load('images/shipblue.bmp'))
+		#self.sprites.append(pygame.image.load('images/shipfire.png'))		
+		self.sprites.append(pygame.image.load('images/shipglow.png'))
+		self.sprites.append(pygame.image.load('images/shipblue.png'))
 		#self.sprites.append(pygame.image.load('images/OGshippng.png'))
-		#self.sprites.append(pygame.image.load('images/explosion.png'))
 		
 		self.current_sprite = 0
 		self.image = self.sprites[self.current_sprite]
@@ -49,13 +48,12 @@ class Ship(Sprite):
 	def update(self):
 		'''Update the ship's position based on the movement flag.'''
 		
+		#Stops updating if ship is dead
+		if self.dead_check:
+			return
+		
 		#Updates position and sprite every 0.5 milliseconds
 		if (time.time() - self.current) > 0.0005:
-			
-			if self.dead_check:
-				self.image = pygame.image.load('images/explosion.png')
-				self.image = pygame.transform.scale(self.image,(50,50))
-				return
 			
 			#Update the ship's x value, not the rect
 			if self.moving_right and self.rect.right < self.screen_rect.right:

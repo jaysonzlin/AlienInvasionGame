@@ -69,11 +69,15 @@ class AlienInvasion:
 		
 		while True:
 			self._check_events()
-			self.ship.update()
-			self.settings.update()
-			self._update_aliens()
-			self._update_bullets()
+			
+			if self.stats.game_active:	
+				self.ship.update()					
+				self.settings.update()
+				self._update_aliens()
+				self._update_bullets()
+			
 			self._update_screen()
+			
 			
 	def _check_events(self):
 		'''Respond to keypresses and mouse events.'''
@@ -111,8 +115,14 @@ class AlienInvasion:
 		'''Respond to the ship being hit by an alien'''
 		
 		#Decrement ship_lives
-		self.stats.ship_lives -= 1
-		
+		if self.settings.ship_lives > 0:
+			self.settings.ship_lives -= 1
+
+		#Make the ship explode
+		self.ship.image = pygame.image.load('images/explosion.png')
+		self.ship.image = pygame.transform.scale(self.ship.image,(50,50))
+		self.ship.blitme()
+
 		#Get rid of any remaining aliens and bullets
 		self.aliens.empty()
 		self.bullets.empty()
@@ -121,6 +131,10 @@ class AlienInvasion:
 		self.ship.dead_check = True
 		self.rdcheck = False
 		self.death_timer = time()
+		
+		if self.settings.ship_lives <= 0:
+			self.stats.game_active = False
+		
 		
 	def _fire_bullet(self):
 		'''Create a new bullet and add it to the bullets group.'''
@@ -150,7 +164,7 @@ class AlienInvasion:
 		#Check for any bullets that have hit aliens
 		#If so, get rid of the bullet
 		#Each hit causes the alien to lose life points and removes alien if alien life points are 0
-		for alien in self.aliens:
+		for alien in self.aliens.sprites():
 			col_i = pygame.sprite.spritecollide(alien, self.bullets, self.settings.god_bullet_off)
 			if col_i:
 				alien.lives -= self.settings.bullet_power
@@ -213,7 +227,6 @@ class AlienInvasion:
 		if (self.rd % 3) == 2:
 			alien = invader2(self)
 			alien.lives += self.alien_up
-			print(self.settings.alien_spd_multi)
 		if (self.rd % 3) == 0:
 			alien = invader3(self)
 			alien.lives += self.alien_up
@@ -242,6 +255,16 @@ class AlienInvasion:
 			
 		self.settings.fleet_direction *= -1
 		self.fleet_check = False
+		
+	def _check_aliens_bottom(self):
+		'''Check if any aliens have reached the bottom of the screen'''
+		
+		screen_rect = self.screen.get_rect()
+		for alien in self.aliens.sprites():
+			if alien.rect.bottom >= screen_rect.bottom:
+			#Treat this the same as if the ship got hit.
+				self._ship_hit()
+				break
 			
 	def _update_aliens(self):
 		'''Updates position and animation of aliens'''
@@ -256,6 +279,9 @@ class AlienInvasion:
 		#Look for alien-ship collisions
 		if pygame.sprite.spritecollideany(self.ship,self.aliens):
 			self._ship_hit()
+			
+		#Look for aliens hitting the bottom of the screen
+		self._check_aliens_bottom()
 		
 	def _update_screen(self):
 		'''Update images on the screen, and flip to the new screen.'''
