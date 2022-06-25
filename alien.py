@@ -11,6 +11,7 @@ class Alien(Sprite):
 		self.screen = ai_game.screen
 		self.settings = ai_game.settings
 		self.ship = ai_game.ship
+		self.game = ai_game
 		
 		#Hits needed to kill alien
 		self.lives = 1
@@ -67,6 +68,9 @@ class invader1(Alien):
 		self.width = 60
 		self.height = 43
 		
+		#Points this invader is worth
+		self.points = 20 + ai_game.stats.rd * 10
+		
 		#Load the alien image with animations and set its rect attribute
 		self.sprites = []
 		self.sprites.append(pygame.image.load('images/invader1.png'))
@@ -90,6 +94,9 @@ class invader2(Alien):
 		self.width = 43
 		self.height = 43
 		
+		#Points this invader is worth
+		self.points = 30 + ai_game.stats.rd * 10
+		
 		#Load the alien image with animations and set its rect attribute
 		self.sprites = []
 		self.sprites.append(pygame.image.load('images/invader2.png'))
@@ -112,6 +119,9 @@ class invader3(Alien):
 		#Invader size
 		self.width = 50
 		self.height = 50
+		
+		#Points this invader is worth
+		self.points = 40 + ai_game.stats.rd * 10
 		
 		#Load the alien image with animations and set its rect attribute
 		self.sprites = []

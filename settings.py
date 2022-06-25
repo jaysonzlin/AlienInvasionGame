@@ -1,15 +1,9 @@
 # Settings
-import pygame, time
 
 class Settings:
 	'''A class to store all settings for Alien Invasion'''
 	def __init__(self):
 		'''Initialize the game's settings.'''
-		
-		#Timing Test
-		#Creates a timer for each alien sprite
-		self.clock = pygame.time.Clock()
-		self.current = time.time()
 		
 		#Screen settings
 		self.screen_width = 1000
@@ -21,7 +15,7 @@ class Settings:
 		self.ship_multi = 250.0
 		self.ship_multi2 = 700.0
 		self.ship_multi3 = 2000
-		self.ship_lives = 3
+		self.ship_lives = 4
 		
 		#Bullet settings
 		self.bullet_speed = 1.0
@@ -31,29 +25,17 @@ class Settings:
 		self.bullet_color = (235,52,52)
 		self.bullets_allowed = 99
 		self.bullet_power = 1
+		self.bullet_firing_speed = 0.25 #machine gun: 0.10 laser:0.005
 		self.god_bullet_off = True
 		
 		#Alien settings
-		self.alien_speed = 10.0
+		self.alien_speed = 0.0
 		
-		self.alien_spd_multi = 60.0 
+		self.alien_spd_multi = 250.0 
 		self.alien_spd_cap = 250  #Alien speed cap
 		
-		self.fleet_drop_speed = 20
+		self.fleet_drop_speed = 200
 		
 		#fleet_direction of 1 represents right; -1 represents left
 		self.fleet_direction = 1
 
-	def update(self):
-		'''Updates setting values'''
-		
-		#Caps the alien movement speed
-		if self.alien_spd_multi >= 250:
-			self.alien_spd_multi = 250
-		
-		#Delta time to enable frame rate independence for movements
-		dt = (time.time() - self.current)
-		self.alien_speed = self.alien_spd_multi * dt
-		self.bullet_speed = self.bullet_multi * dt
-		self.ship_speed = self.ship_multi3 * dt
-		self.current = time.time()

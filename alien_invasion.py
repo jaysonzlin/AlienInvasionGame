@@ -3,6 +3,9 @@ import sys, pygame
 from time import sleep, time
 from settings import Settings
 from game_stats import GameStats
+from button import Button
+from scoreboard import Scoreboard
+
 from ship import Ship
 from bullet import Bullet
 from alien import Alien, invader1, invader2, invader3
@@ -21,9 +24,7 @@ class AlienInvasion:
 		#Game runtime
 		self.clock = pygame.time.Clock()
 		self.death_timer = time()
-		
-		#Round number
-		self.rd = 1
+		self.prev_time = time()
 		
 		#Counter for increasing alien lives
 		self.alien_up = 0
@@ -31,25 +32,31 @@ class AlienInvasion:
 		#Prevents round increments due to empty screen from ship hits
 		self.rdcheck = True
 		
+		#Create an instance to store the game statistics
+		self.stats = GameStats(self)
+		
 		#Sound effects and volume
 		self.ship_death = pygame.mixer.Sound('sounds/ship_death.wav')
 		self.bullet_firing = pygame.mixer.Sound('sounds/bullet_firing.wav')
 		self.alien_pop = pygame.mixer.Sound('sounds/alien_pop.wav')
 		self.ufo_death = pygame.mixer.Sound('sounds/ufo_death.wav')
 		
-		#Background Music
-		pygame.mixer.music.load('sounds/bg_music.wav')
+		#Background Music (Work in progress); probably better to play the music directly since it work correctly in a loop
+		#Plays outside the game
+		pygame.mixer.music.load('sounds/streets_of_passion.wav')
 		pygame.mixer.music.play(-1)
 		pygame.mixer.music.set_volume(0.3)
+		#Plays during the game
+		if self.stats.game_active:
+			pygame.mixer.music.load('sounds/bg_music.wav')
+			pygame.mixer.music.play(-1)
+			pygame.mixer.music.set_volume(0.3)
 		
 		#Fleet check implementation boolean
 		self.fleet_check = True
 		
 		#For preset screen size:
 		self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
-		
-		#Create an instance to store the game statistics
-		self.stats = GameStats(self)
 		
 		#Creating the game window
 		#self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
@@ -64,6 +71,9 @@ class AlienInvasion:
 		
 		self._create_fleet()
 		
+		self.play_button = Button(self, 'Play')
+		self.sb = Scoreboard(self)
+		
 	def run_game(self):
 		'''Start the main loop for the game'''
 		
@@ -72,7 +82,7 @@ class AlienInvasion:
 			
 			if self.stats.game_active:	
 				self.ship.update()					
-				self.settings.update()
+				self.stats.update()
 				self._update_aliens()
 				self._update_bullets()
 			
@@ -82,14 +92,48 @@ class AlienInvasion:
 	def _check_events(self):
 		'''Respond to keypresses and mouse events.'''
 		
+		#Allows player to simply hold spacebar to fire
+		keys = pygame.key.get_pressed()
+		if keys[pygame.K_SPACE]:
+			self._fire_bullet()
+		
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
-				sys.exit()			
+				sys.exit()		
+					
 			elif event.type == pygame.KEYDOWN:
 				self._check_keydown_events(event)
 				
 			elif event.type == pygame.KEYUP:
 				self._check_keyup_events(event)
+				
+			elif event.type == pygame.MOUSEBUTTONDOWN:
+				mouse_pos = pygame.mouse.get_pos()
+				self._check_play_button(mouse_pos)
+			
+	def _check_play_button(self, mouse_pos):
+		'''Start a new game when the player clicks Play'''
+		
+		button_clicked = self.play_button.rect.collidepoint(mouse_pos)
+		
+		if button_clicked and not self.stats.game_active:
+			#Prevents the button from being pressed while game is playing
+			
+			#Reset the game statistics
+			self.stats.reset_stats()
+			
+			self.stats.game_active = True
+			
+			#Get rid of any remaining aliens and bullets
+			self.aliens.empty()
+			self.bullets.empty()
+			
+			#Create a new fleet and center teh ship
+			self._create_fleet()
+			self.ship.center_ship()
+		
+			#Hide the mouse cursor
+			pygame.mouse.set_visible(False)
 					
 	def _check_keydown_events(self, event):
 		'''Respond to keypresses.'''
@@ -100,8 +144,6 @@ class AlienInvasion:
 			self.ship.moving_left = True
 		elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
 			sys.exit()
-		elif event.key == pygame.K_SPACE:
-			self._fire_bullet()
 			
 	def _check_keyup_events(self, event):
 		'''Respond to key releases'''
@@ -118,7 +160,8 @@ class AlienInvasion:
 		if self.settings.ship_lives > 0:
 			self.settings.ship_lives -= 1
 
-		#Make the ship explode
+		#Make the ship explode		
+		pygame.mixer.Sound.play(self.ship_death)
 		self.ship.image = pygame.image.load('images/explosion.png')
 		self.ship.image = pygame.transform.scale(self.ship.image,(50,50))
 		self.ship.blitme()
@@ -127,22 +170,25 @@ class AlienInvasion:
 		self.aliens.empty()
 		self.bullets.empty()
 		
-		pygame.mixer.Sound.play(self.ship_death)
+
 		self.ship.dead_check = True
 		self.rdcheck = False
 		self.death_timer = time()
 		
 		if self.settings.ship_lives <= 0:
 			self.stats.game_active = False
+			#Makes cursor visible
+			pygame.mouse.set_visible(True)
 		
 		
 	def _fire_bullet(self):
 		'''Create a new bullet and add it to the bullets group.'''
 		
-		if len(self.bullets) < self.settings.bullets_allowed:
+		if len(self.bullets) < self.settings.bullets_allowed and self.stats.game_active and (time() - self.prev_time) > self.settings.bullet_firing_speed:
 			new_bullet = Bullet(self)
 			self.bullets.add(new_bullet)
 			pygame.mixer.Sound.play(self.bullet_firing)
+			self.prev_time = time()
 			
 	def _update_bullets(self):
 		'''Update position of bullets and get rid of old bullets'''
@@ -170,6 +216,7 @@ class AlienInvasion:
 				alien.lives -= self.settings.bullet_power
 				if alien.lives <= 0:
 					pygame.mixer.Sound.play(self.alien_pop)
+					self.stats.score += alien.points
 					alien.kill()
 		
 		if not self.aliens and self.ship.dead_check == False:
@@ -177,7 +224,7 @@ class AlienInvasion:
 			self.bullets.empty()
 			sleep(0.05)
 			if self.rdcheck:
-				self.rd += 1 
+				self.stats.rd += 1 
 				#For every new round, add a life point to all aliens and increase their speed
 				self.alien_up += 1
 				self.settings.alien_spd_multi += 10
@@ -192,11 +239,11 @@ class AlienInvasion:
 		#Create an alien and find the number of aliens in a row
 		#Different aliens for different rounds
 		#Spacing between each alien is equal to one alien width
-		if (self.rd % 3) == 1:
+		if (self.stats.rd % 3) == 1:
 			alien = invader1(self)
-		if (self.rd % 3) == 2:
+		if (self.stats.rd % 3) == 2:
 			alien = invader2(self)
-		if (self.rd % 3) == 0:
+		if (self.stats.rd % 3) == 0:
 			alien = invader3(self)
 			
 		alien_width, alien_height = alien.rect.size
@@ -221,13 +268,13 @@ class AlienInvasion:
 	def _create_alien(self, alien_number, row_number):
 		'''Create an alien and place it in the row'''
 		
-		if (self.rd % 3) == 1:
+		if (self.stats.rd % 3) == 1:
 			alien = invader1(self)
 			alien.lives += self.alien_up
-		if (self.rd % 3) == 2:
+		if (self.stats.rd % 3) == 2:
 			alien = invader2(self)
 			alien.lives += self.alien_up
-		if (self.rd % 3) == 0:
+		if (self.stats.rd % 3) == 0:
 			alien = invader3(self)
 			alien.lives += self.alien_up
 			
@@ -292,6 +339,13 @@ class AlienInvasion:
 		for bullet in self.bullets.sprites():
 			bullet.draw_bullet()
 		self.aliens.draw(self.screen)
+			
+		#Draw the play button if the game is inactive
+		if not self.stats.game_active:
+			self.play_button.draw_button()
+			
+		#Draw the score information
+		self.sb.show_score()
 			
 		#Make the most recently drawn screen visible
 		pygame.display.flip()
