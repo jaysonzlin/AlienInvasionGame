@@ -14,7 +14,7 @@ class Alien(Sprite):
 		self.game = ai_game
 		
 		#Hits needed to kill alien
-		self.lives = 1
+		self.lives = self.settings.alien_lives
 		
 		#Creates a timer for each alien sprite
 		self.clock = pygame.time.Clock()

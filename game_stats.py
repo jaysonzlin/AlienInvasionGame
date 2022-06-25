@@ -34,6 +34,7 @@ class GameStats:
 		self.score = 0
 		self.time_counter = 0
 		self.rd = 1
+		self.settings.alien_lives = 1
 		
 	def update(self):
 		'''Updates setting values'''

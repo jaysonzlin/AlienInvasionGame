@@ -4,6 +4,7 @@ from time import sleep, time
 from settings import Settings
 from game_stats import GameStats
 from button import Button
+from menu import Menu
 from scoreboard import Scoreboard
 
 from ship import Ship
@@ -25,9 +26,6 @@ class AlienInvasion:
 		self.clock = pygame.time.Clock()
 		self.death_timer = time()
 		self.prev_time = time()
-		
-		#Counter for increasing alien lives
-		self.alien_up = 0
 		
 		#Prevents round increments due to empty screen from ship hits
 		self.rdcheck = True
@@ -71,7 +69,7 @@ class AlienInvasion:
 		
 		self._create_fleet()
 		
-		self.play_button = Button(self, 'Play')
+		self.menu = Menu(self)
 		self.sb = Scoreboard(self)
 		
 	def run_game(self):
@@ -94,7 +92,7 @@ class AlienInvasion:
 		
 		#Allows player to simply hold spacebar to fire
 		keys = pygame.key.get_pressed()
-		if keys[pygame.K_SPACE]:
+		if keys[pygame.K_SPACE] and not self.ship.dead_check:
 			self._fire_bullet()
 		
 		for event in pygame.event.get():
@@ -107,6 +105,21 @@ class AlienInvasion:
 			elif event.type == pygame.KEYUP:
 				self._check_keyup_events(event)
 				
+			if event.type == pygame.MOUSEMOTION:
+				#Mouse cursor changes to hand if hovering over buttons
+				x, y = event.pos
+				#Play Button
+				if ( x in range(421,580)) and (y in range(547,600)):
+					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
+				#HTP Button
+				elif ( x in range(150,309)) and (y in range(547,600)):
+					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
+				#Credits Button
+				elif ( x in range(691,850)) and (y in range(547,600)):
+					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)	
+				else:
+					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+				
 			elif event.type == pygame.MOUSEBUTTONDOWN:
 				mouse_pos = pygame.mouse.get_pos()
 				self._check_play_button(mouse_pos)
@@ -114,9 +127,9 @@ class AlienInvasion:
 	def _check_play_button(self, mouse_pos):
 		'''Start a new game when the player clicks Play'''
 		
-		button_clicked = self.play_button.rect.collidepoint(mouse_pos)
+		play_button_clicked = self.menu.play_rect.collidepoint(mouse_pos)
 		
-		if button_clicked and not self.stats.game_active:
+		if play_button_clicked and not self.stats.game_active:
 			#Prevents the button from being pressed while game is playing
 			
 			#Reset the game statistics
@@ -226,7 +239,7 @@ class AlienInvasion:
 			if self.rdcheck:
 				self.stats.rd += 1 
 				#For every new round, add a life point to all aliens and increase their speed
-				self.alien_up += 1
+				self.settings.alien_lives += 1
 				self.settings.alien_spd_multi += 10
 			if not self.rdcheck:
 				self.ship.center_ship()
@@ -270,13 +283,10 @@ class AlienInvasion:
 		
 		if (self.stats.rd % 3) == 1:
 			alien = invader1(self)
-			alien.lives += self.alien_up
 		if (self.stats.rd % 3) == 2:
 			alien = invader2(self)
-			alien.lives += self.alien_up
 		if (self.stats.rd % 3) == 0:
 			alien = invader3(self)
-			alien.lives += self.alien_up
 			
 		alien_width, alien_height = alien.rect.size
 		alien.x = alien_width + 1.5 * alien_width * alien_number
@@ -342,10 +352,11 @@ class AlienInvasion:
 			
 		#Draw the play button if the game is inactive
 		if not self.stats.game_active:
-			self.play_button.draw_button()
+			self.menu.draw_buttons()
 			
 		#Draw the score information
-		self.sb.show_score()
+		if self.stats.game_active:
+			self.sb.show_score()
 			
 		#Make the most recently drawn screen visible
 		pygame.display.flip()
