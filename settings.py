@@ -32,7 +32,7 @@ class Settings:
 		self.alien_lives = 1
 		self.alien_speed = 0.0
 		
-		self.alien_spd_multi = 250.0 
+		self.alien_spd_multi = 60.0 
 		self.alien_spd_cap = 250  #Alien speed cap
 		
 		self.fleet_drop_speed = 20

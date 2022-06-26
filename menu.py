@@ -7,6 +7,7 @@ class Menu:
 	
 	def __init__(self, ai_game):
 		'''Initialize main menu'''
+		
 		self.screen = ai_game.screen
 		self.screen_rect = self.screen.get_rect()
 		self.settings = ai_game.settings
@@ -21,7 +22,7 @@ class Menu:
 		
 		self.logo_rect = self.logo.get_rect()
 		self.logo_rect.center = self.screen_rect.center
-		self.logo_rect.top = 20
+		self.logo_rect.top = self.screen_rect.top + 20
 		
 		#Play button
 		self.play_button = pygame.image.load('images/play.png')
@@ -47,10 +48,32 @@ class Menu:
 		self.credits_rect.right = self.screen_rect.right - 150
 		self.credits_rect.bottom = self.screen_rect.bottom - 150
 		
+		#Back Button
+		self.back_button = pygame.image.load('images/back.png')
+		self.back_button = pygame.transform.scale(self.back_button, (83, 57))
+		#Back Button rect
+		self.back_rect = self.back_button.get_rect()
+		self.back_rect.left = self.screen_rect.left + 20
+		self.back_rect.top = self.screen_rect.top + 20
+		
+		#Checks if How to Play section is active
+		self.htp_check = False
+		#Checks if Credits section is active
+		self.credits_check = False
+		
 	def draw_buttons(self):
 		
-		self.screen.fill(self.settings.bg_color, self.screen_rect)
-		self.screen.blit(self.play_button, self.play_rect)
-		self.screen.blit(self.htp_button, self.htp_rect)
-		self.screen.blit(self.credits_button, self.credits_rect)
-		self.screen.blit(self.logo, self.logo_rect)
+		if not self.htp_check and not self.credits_check:
+			self.screen.fill(self.settings.bg_color, self.screen_rect)
+			self.screen.blit(self.play_button, self.play_rect)
+			self.screen.blit(self.htp_button, self.htp_rect)
+			self.screen.blit(self.credits_button, self.credits_rect)
+			self.screen.blit(self.logo, self.logo_rect)
+			
+		elif self.htp_check:
+			self.screen.fill(self.settings.bg_color, self.screen_rect)
+			self.screen.blit(self.back_button, self.back_rect)
+			
+		elif self.credits_check:
+			self.screen.fill(self.settings.bg_color, self.screen_rect)
+			self.screen.blit(self.back_button, self.back_rect)

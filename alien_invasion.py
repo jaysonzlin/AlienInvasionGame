@@ -38,6 +38,9 @@ class AlienInvasion:
 		self.bullet_firing = pygame.mixer.Sound('sounds/bullet_firing.wav')
 		self.alien_pop = pygame.mixer.Sound('sounds/alien_pop.wav')
 		self.ufo_death = pygame.mixer.Sound('sounds/ufo_death.wav')
+		self.back_sound = pygame.mixer.Sound('sounds/back_sound.wav')
+		self.play_sound = pygame.mixer.Sound('sounds/play_sound.wav')
+		self.play_sound.set_volume(0.5)
 		
 		#Background Music (Work in progress); probably better to play the music directly since it work correctly in a loop
 		#Plays outside the game
@@ -123,6 +126,9 @@ class AlienInvasion:
 			elif event.type == pygame.MOUSEBUTTONDOWN:
 				mouse_pos = pygame.mouse.get_pos()
 				self._check_play_button(mouse_pos)
+				self._check_htp_button(mouse_pos)
+				self._check_credits_button(mouse_pos)
+				self._check_back_button(mouse_pos)
 			
 	def _check_play_button(self, mouse_pos):
 		'''Start a new game when the player clicks Play'''
@@ -134,7 +140,7 @@ class AlienInvasion:
 			
 			#Reset the game statistics
 			self.stats.reset_stats()
-			
+			pygame.mixer.Sound.play(self.play_sound)
 			self.stats.game_active = True
 			
 			#Get rid of any remaining aliens and bullets
@@ -147,6 +153,37 @@ class AlienInvasion:
 		
 			#Hide the mouse cursor
 			pygame.mouse.set_visible(False)
+					
+	def _check_htp_button(self, mouse_pos):
+		'''Pulls up the How to Play guide'''
+		
+		htp_button_clicked = self.menu.htp_rect.collidepoint(mouse_pos)
+		
+		if htp_button_clicked and not self.stats.game_active:
+			#Prevents the button from being pressed while in game
+			pygame.mixer.Sound.play(self.back_sound)
+			self.menu.htp_check = True
+			
+	def _check_credits_button(self, mouse_pos):
+		'''Pulls up the How to Play guide'''
+		
+		credits_button_clicked = self.menu.credits_rect.collidepoint(mouse_pos)
+		
+		if credits_button_clicked and not self.stats.game_active:
+			#Prevents the button from being pressed while in game
+			pygame.mixer.Sound.play(self.back_sound)
+			self.menu.credits_check = True
+			
+	def _check_back_button(self, mouse_pos):
+		'''Brings player back to main menu'''
+		
+		back_button_clicked = self.menu.back_rect.collidepoint(mouse_pos)
+		
+		if back_button_clicked and not self.stats.game_active:
+			#Prevents the button from being pressed while in game
+			pygame.mixer.Sound.play(self.back_sound)
+			self.menu.htp_check = False
+			self.menu.credits_check = False
 					
 	def _check_keydown_events(self, event):
 		'''Respond to keypresses.'''
