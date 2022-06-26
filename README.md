@@ -1,5 +1,4 @@
-# AlienInvasionGame
-## Alien Annihilation
+# Alien Annihilation
 Recreation of Space Invaders with twists
 
 ## Necessary Downloads
