@@ -56,6 +56,9 @@ class AlienInvasion:
 		#Fleet check implementation boolean
 		self.fleet_check = True
 		
+		#Check to prevent power-up menu from being accessed at main menu
+		self.start_check = False
+		
 		#For preset screen size:
 		self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
 		
@@ -63,7 +66,7 @@ class AlienInvasion:
 		#self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
 		self.settings.screen_width = self.screen.get_rect().width
 		self.settings.screen_height = self.screen.get_rect().height
-		pygame.display.set_caption("Alien Invasion Game")
+		pygame.display.set_caption("Alien Annihilation")
 		
 		#Creating an instance of our ship and a group to hold bullets
 		self.ship = Ship(self)
@@ -146,6 +149,7 @@ class AlienInvasion:
 			self.stats.reset_stats()
 			pygame.mixer.Sound.play(self.play_sound)
 			self.stats.game_active = True
+			self.start_check = True
 			
 			#Get rid of any remaining aliens and bullets
 			self.aliens.empty()
@@ -183,7 +187,7 @@ class AlienInvasion:
 		
 		back_button_clicked = self.menu.back_rect.collidepoint(mouse_pos)
 		
-		if back_button_clicked and not self.stats.game_active:
+		if back_button_clicked and not self.stats.game_active and (self.menu.htp_check or self.menu.credits_check):
 			#Prevents the button from being pressed while in game
 			pygame.mixer.Sound.play(self.back_sound)
 			self.menu.htp_check = False
@@ -198,6 +202,11 @@ class AlienInvasion:
 			self.ship.moving_left = True
 		elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
 			sys.exit()
+		#Toggles off and on the powerup menu
+		elif event.key == pygame.K_p and self.start_check:
+			self.stats.game_active = not self.stats.game_active
+			self.menu.pu_check = not self.menu.pu_check
+			self.stats.time_counter = 0
 			
 	def _check_keyup_events(self, event):
 		'''Respond to key releases'''
@@ -231,9 +240,6 @@ class AlienInvasion:
 		
 		if self.settings.ship_lives <= 0:
 			self.stats.game_active = False
-			#Makes cursor visible
-			pygame.mouse.set_visible(True)
-		
 		
 	def _fire_bullet(self):
 		'''Create a new bullet and add it to the bullets group.'''
@@ -398,7 +404,8 @@ class AlienInvasion:
 		#Draw the score information
 		if self.stats.game_active:
 			self.sb.show_score()
-			
+			#Hides the mouse cursor
+			pygame.mouse.set_visible(False)
 		#Make the most recently drawn screen visible
 		pygame.display.flip()
 		

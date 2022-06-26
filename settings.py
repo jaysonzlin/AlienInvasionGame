@@ -23,7 +23,7 @@ class Settings:
 		self.bullet_width = 3
 		self.bullet_height = 15
 		self.bullet_color = (235,52,52)
-		self.bullets_allowed = 99
+		self.bullets_allowed = 3
 		self.bullet_power = 1
 		self.bullet_firing_speed = 0.25 #machine gun: 0.10 laser:0.005
 		self.god_bullet_off = True
