@@ -109,17 +109,21 @@ class AlienInvasion:
 				self._check_keyup_events(event)
 				
 			if event.type == pygame.MOUSEMOTION:
-				#Mouse cursor changes to hand if hovering over buttons
+				#Mouse cursor changes to hand if hovering over visible buttons
 				x, y = event.pos
 				#Play Button
-				if ( x in range(421,580)) and (y in range(547,600)):
+				if ( x in range(421,580)) and (y in range(547,600)) and not self.menu.htp_check and not self.menu.credits_check:
 					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
 				#HTP Button
-				elif ( x in range(150,309)) and (y in range(547,600)):
+				elif ( x in range(150,309)) and (y in range(547,600)) and not self.menu.htp_check and not self.menu.credits_check:
 					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
 				#Credits Button
-				elif ( x in range(691,850)) and (y in range(547,600)):
+				elif ( x in range(691,850)) and (y in range(547,600)) and not self.menu.htp_check and not self.menu.credits_check:
 					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)	
+				#Back Button
+				elif ((x in range(20, 103) and (y in range(20, 77)))) and (self.menu.htp_check or self.menu.credits_check):
+					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)	
+					
 				else:
 					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 				
@@ -135,7 +139,7 @@ class AlienInvasion:
 		
 		play_button_clicked = self.menu.play_rect.collidepoint(mouse_pos)
 		
-		if play_button_clicked and not self.stats.game_active:
+		if play_button_clicked and not self.stats.game_active and not self.menu.htp_check and not self.menu.credits_check:
 			#Prevents the button from being pressed while game is playing
 			
 			#Reset the game statistics
@@ -159,7 +163,7 @@ class AlienInvasion:
 		
 		htp_button_clicked = self.menu.htp_rect.collidepoint(mouse_pos)
 		
-		if htp_button_clicked and not self.stats.game_active:
+		if htp_button_clicked and not self.stats.game_active and not self.menu.htp_check and not self.menu.credits_check:
 			#Prevents the button from being pressed while in game
 			pygame.mixer.Sound.play(self.back_sound)
 			self.menu.htp_check = True
@@ -169,7 +173,7 @@ class AlienInvasion:
 		
 		credits_button_clicked = self.menu.credits_rect.collidepoint(mouse_pos)
 		
-		if credits_button_clicked and not self.stats.game_active:
+		if credits_button_clicked and not self.stats.game_active and not self.menu.htp_check and not self.menu.credits_check:
 			#Prevents the button from being pressed while in game
 			pygame.mixer.Sound.play(self.back_sound)
 			self.menu.credits_check = True
