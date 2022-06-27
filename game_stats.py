@@ -52,5 +52,5 @@ class GameStats:
 		dt = (time.time()  - self.prev_time)
 		self.settings.alien_speed = self.settings.alien_spd_multi * dt
 		self.settings.bullet_speed = self.settings.bullet_multi * dt
-		self.settings.ship_speed = self.settings.ship_multi3 * dt
+		self.settings.ship_speed = self.settings.ship_multi * dt
 		self.prev_time = time.time()

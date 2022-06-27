@@ -47,12 +47,7 @@ class AlienInvasion:
 		pygame.mixer.music.load('sounds/streets_of_passion.wav')
 		pygame.mixer.music.play(-1)
 		pygame.mixer.music.set_volume(0.3)
-		#Plays during the game
-		if self.stats.game_active:
-			pygame.mixer.music.load('sounds/bg_music.wav')
-			pygame.mixer.music.play(-1)
-			pygame.mixer.music.set_volume(0.3)
-		
+
 		#Fleet check implementation boolean
 		self.fleet_check = True
 		
@@ -115,18 +110,17 @@ class AlienInvasion:
 				#Mouse cursor changes to hand if hovering over visible buttons
 				x, y = event.pos
 				#Play Button
-				if ( x in range(421,580)) and (y in range(547,600)) and not self.menu.htp_check and not self.menu.credits_check:
+				if ( x in range(421,580)) and (y in range(547,600)) and not self.menu.htp_check and not self.menu.credits_check and not self.menu.pu_check:
 					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
 				#HTP Button
-				elif ( x in range(150,309)) and (y in range(547,600)) and not self.menu.htp_check and not self.menu.credits_check:
+				elif ( x in range(150,309)) and (y in range(547,600)) and not self.menu.htp_check and not self.menu.credits_check and not self.menu.pu_check:
 					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
 				#Credits Button
-				elif ( x in range(691,850)) and (y in range(547,600)) and not self.menu.htp_check and not self.menu.credits_check:
+				elif ( x in range(691,850)) and (y in range(547,600)) and not self.menu.htp_check and not self.menu.credits_check and not self.menu.pu_check:
 					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)	
 				#Back Button
 				elif ((x in range(20, 103) and (y in range(20, 77)))) and (self.menu.htp_check or self.menu.credits_check):
-					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)	
-					
+					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)		
 				else:
 					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 				
@@ -142,7 +136,7 @@ class AlienInvasion:
 		
 		play_button_clicked = self.menu.play_rect.collidepoint(mouse_pos)
 		
-		if play_button_clicked and not self.stats.game_active and not self.menu.htp_check and not self.menu.credits_check:
+		if play_button_clicked and not self.stats.game_active and not self.menu.htp_check and not self.menu.credits_check and not self.menu.pu_check:
 			#Prevents the button from being pressed while game is playing
 			
 			#Reset the game statistics
@@ -150,6 +144,12 @@ class AlienInvasion:
 			pygame.mixer.Sound.play(self.play_sound)
 			self.stats.game_active = True
 			self.start_check = True
+			
+			#Plays during the game
+			pygame.mixer.music.load('sounds/bg_music.wav')
+			pygame.mixer.music.play(-1)
+			pygame.mixer.music.set_volume(0.3)
+		
 			
 			#Get rid of any remaining aliens and bullets
 			self.aliens.empty()
@@ -167,7 +167,7 @@ class AlienInvasion:
 		
 		htp_button_clicked = self.menu.htp_rect.collidepoint(mouse_pos)
 		
-		if htp_button_clicked and not self.stats.game_active and not self.menu.htp_check and not self.menu.credits_check:
+		if htp_button_clicked and not self.stats.game_active and not self.menu.htp_check and not self.menu.credits_check and not self.menu.pu_check:
 			#Prevents the button from being pressed while in game
 			pygame.mixer.Sound.play(self.back_sound)
 			self.menu.htp_check = True
@@ -177,7 +177,7 @@ class AlienInvasion:
 		
 		credits_button_clicked = self.menu.credits_rect.collidepoint(mouse_pos)
 		
-		if credits_button_clicked and not self.stats.game_active and not self.menu.htp_check and not self.menu.credits_check:
+		if credits_button_clicked and not self.stats.game_active and not self.menu.htp_check and not self.menu.credits_check and not self.menu.pu_check:
 			#Prevents the button from being pressed while in game
 			pygame.mixer.Sound.play(self.back_sound)
 			self.menu.credits_check = True
@@ -240,6 +240,7 @@ class AlienInvasion:
 		
 		if self.settings.ship_lives <= 0:
 			self.stats.game_active = False
+			self.start_check = False
 		
 	def _fire_bullet(self):
 		'''Create a new bullet and add it to the bullets group.'''
@@ -324,6 +325,12 @@ class AlienInvasion:
 		
 		#New fleet always moves rightward		
 		self.settings.fleet_direction = 1
+		
+		#Changes song at level 5
+		if self.stats.rd == 5:
+			pygame.mixer.music.load('sounds/streets_of_passion.wav')
+			pygame.mixer.music.play(-1)
+			pygame.mixer.music.set_volume(0.3)
 			
 	def _create_alien(self, alien_number, row_number):
 		'''Create an alien and place it in the row'''
@@ -400,12 +407,17 @@ class AlienInvasion:
 		#Draw the play button if the game is inactive
 		if not self.stats.game_active:
 			self.menu.draw_buttons()
+			pygame.mouse.set_visible(True)
 			
-		#Draw the score information
-		if self.stats.game_active:
+		#Draw the score information during game and powerup menu
+		if self.stats.game_active or self.menu.pu_check:
 			self.sb.show_score()
-			#Hides the mouse cursor
-			pygame.mouse.set_visible(False)
+			if not self.menu.pu_check:
+				#Hides the mouse cursor if power-up menu is not pulled up
+				pygame.mouse.set_visible(False)
+			if self.menu.pu_check:
+				#Makes cursor visible for power-up menu
+				pygame.mouse.set_visible(True)
 		#Make the most recently drawn screen visible
 		pygame.display.flip()
 		

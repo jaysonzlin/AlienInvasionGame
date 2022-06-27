@@ -92,8 +92,8 @@ class Menu:
 		self.back_rect.top = self.screen_rect.top + 20
 		
 		#Power Up - Speed Up
-		self.spd_button = pygame.image.load('images/example.png')
-		self.spd_button = pygame.transform.scale(self.spd_button, (150, 150))
+		self.spd_button = pygame.image.load('images/pubg.png')
+		self.spd_button = pygame.transform.scale(self.spd_button, (800, 533))
 		#Speed Up Rect
 		self.spd_rect = self.spd_button.get_rect()
 		self.spd_rect.center = self.screen_rect.center
@@ -107,9 +107,6 @@ class Menu:
 		
 	def draw_buttons(self):
 		
-		#Makes cursor visible
-		pygame.mouse.set_visible(True)
-
 		if not self.htp_check and not self.credits_check and not self.pu_check:
 			self.screen.fill(self.settings.bg_color, self.screen_rect)
 			self.screen.blit(self.play_button, self.play_rect)
