@@ -63,7 +63,7 @@ class Scoreboard:
 		
 		#For four or more lives
 		if self.settings.ship_lives > 3:
-			ship = Ship(self.ai_game)
+			ship = Ship(self.ai_game, self.settings.ship_type)
 			ship.rect.x = 10
 			ship.rect.y = 10
 			self.ships.add(ship)
@@ -83,7 +83,7 @@ class Scoreboard:
 		
 		#For three or less lives
 		for ship_number in range(self.settings.ship_lives):
-			ship = Ship(self.ai_game)
+			ship = Ship(self.ai_game, self.settings.ship_type)
 			ship.rect.x = 10 + ship_number * ship.rect.width
 			ship.rect.y = 10
 			self.ships.add(ship)

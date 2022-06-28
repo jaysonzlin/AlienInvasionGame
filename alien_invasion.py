@@ -3,12 +3,11 @@ import sys, pygame
 from time import sleep, time
 from settings import Settings
 from game_stats import GameStats
-from button import Button
 from menu import Menu
 from scoreboard import Scoreboard
 
 from ship import Ship
-from bullet import Bullet
+from bullet import Bullet, LeftBullet, RightBullet
 from alien import Alien, invader1, invader2, invader3
 
 class AlienInvasion:
@@ -61,12 +60,11 @@ class AlienInvasion:
 		
 		#Creating the game window
 		#self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
-		self.settings.screen_width = self.screen.get_rect().width
-		self.settings.screen_height = self.screen.get_rect().height
+		self.screen_rect = self.screen.get_rect()
 		pygame.display.set_caption("Alien Annihilation")
 		
 		#Creating an instance of our ship and a group to hold bullets
-		self.ship = Ship(self)
+		self.ship = Ship(self, 0)
 		self.bullets = pygame.sprite.Group()
 		self.aliens = pygame.sprite.Group()
 		
@@ -80,7 +78,6 @@ class AlienInvasion:
 		
 		while True:
 			self._check_events()
-			print(self.settings.ship_lives)
 			if self.stats.game_active:	
 				self.ship.update()					
 				self.stats.update()
@@ -150,12 +147,23 @@ class AlienInvasion:
 					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 				
 			elif event.type == pygame.MOUSEBUTTONDOWN:
+				#Checks for button presses
 				mouse_pos = pygame.mouse.get_pos()
+				#Main Menu
 				self._check_play_button(mouse_pos)
 				self._check_htp_button(mouse_pos)
 				self._check_credits_button(mouse_pos)
 				self._check_back_button(mouse_pos)
+				###Power-Up Menu
+				##Top Row
 				self._check_bdmg_button(mouse_pos)
+				self._check_bspd_button(mouse_pos)
+				self._check_ts_button(mouse_pos)
+				self._check_deus_button(mouse_pos)
+				##Bottom Row
+				self._check_sspd_button(mouse_pos)
+				self._check_sfrm_button(mouse_pos)
+				self._check_bc_button(mouse_pos)
 				self._check_elife_button(mouse_pos)
 				
 	def _check_keydown_events(self, event):
@@ -165,6 +173,10 @@ class AlienInvasion:
 			self.ship.moving_right = True
 		elif event.key == pygame.K_LEFT:
 			self.ship.moving_left = True
+		elif event.key == pygame.K_UP:
+			self.ship.moving_up = True
+		elif event.key == pygame.K_DOWN:
+			self.ship.moving_down = True
 		elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
 			sys.exit()
 		#Toggles off and on the powerup menu
@@ -180,6 +192,10 @@ class AlienInvasion:
 			self.ship.moving_right = False
 		elif event.key == pygame.K_LEFT:
 			self.ship.moving_left = False
+		elif event.key == pygame.K_UP:
+			self.ship.moving_up = False
+		elif event.key == pygame.K_DOWN:
+			self.ship.moving_down = False
 			
 	def _check_play_button(self, mouse_pos):
 		'''Start a new game when the player clicks Play'''
@@ -254,7 +270,7 @@ class AlienInvasion:
 		
 		bdmg_button_clicked = self.menu.bdmg_rect.collidepoint(mouse_pos)
 		
-		if bdmg_button_clicked and self.menu.current_bdmg == 0:
+		if self.menu.pu_check and bdmg_button_clicked and self.menu.current_bdmg == 0:
 			if self._check_creds(3000):
 				self.stats.creds -= 3000
 				self.menu.current_bdmg += 1
@@ -262,7 +278,7 @@ class AlienInvasion:
 				pygame.mixer.Sound.play(self.purchase_sound)
 			else:
 				pygame.mixer.Sound.play(self.deny_sound)
-		elif bdmg_button_clicked and self.menu.current_bdmg == 1:
+		elif self.menu.pu_check and bdmg_button_clicked and self.menu.current_bdmg == 1:
 			if self._check_creds(10000):
 				self.stats.creds -= 10000
 				self.menu.current_bdmg += 1
@@ -270,10 +286,121 @@ class AlienInvasion:
 				pygame.mixer.Sound.play(self.purchase_sound)
 			else:
 				pygame.mixer.Sound.play(self.deny_sound)
-		elif bdmg_button_clicked and self.menu.current_bdmg == 2:
+		elif self.menu.pu_check and bdmg_button_clicked and self.menu.current_bdmg == 2:
 			if self._check_creds(50000):
 				self.stats.creds -= 50000
 				self.settings.bullet_power += 2
+				pygame.mixer.Sound.play(self.purchase_sound)
+			else:
+				pygame.mixer.Sound.play(self.deny_sound)
+				
+	def _check_bspd_button(self, mouse_pos):
+		'''Purchases bullet firing speed upgrade'''
+		
+		bspd_button_clicked = self.menu.bspd_rect.collidepoint(mouse_pos)
+		
+		if self.menu.pu_check and bspd_button_clicked and self.menu.current_bspd == 0:
+			if self._check_creds(5000):
+				self.stats.creds -= 5000
+				self.menu.current_bspd += 1
+				self.settings.bullet_firing_speed = 0.1
+				pygame.mixer.Sound.play(self.purchase_sound)
+			else:
+				pygame.mixer.Sound.play(self.deny_sound)
+		elif self.menu.pu_check and bspd_button_clicked and self.menu.current_bspd == 1:
+			if self._check_creds(20000):
+				self.stats.creds -= 20000
+				self.menu.current_bspd += 1
+				self.settings.bullet_firing_speed = 0.005
+				pygame.mixer.Sound.play(self.purchase_sound)
+			else:
+				pygame.mixer.Sound.play(self.deny_sound)
+				
+	def _check_ts_button(self, mouse_pos):
+		'''Purchases deus bullets upgrade'''
+		
+		ts_button_clicked = self.menu.ts_rect.collidepoint(mouse_pos)
+		
+		if self.menu.pu_check and ts_button_clicked and self.menu.current_ts == 0:
+			if self._check_creds(500000):
+				self.stats.creds -= 500000
+				self.menu.current_ts += 1
+				self.settings.triple_shot = True
+				pygame.mixer.Sound.play(self.purchase_sound)
+			else:
+				pygame.mixer.Sound.play(self.deny_sound)
+				
+	def _check_deus_button(self, mouse_pos):
+		'''Purchases deus bullets upgrade'''
+		
+		deus_button_clicked = self.menu.deus_rect.collidepoint(mouse_pos)
+		
+		if self.menu.pu_check and deus_button_clicked and self.menu.current_deus == 0:
+			if self._check_creds(500000):
+				self.stats.creds -= 500000
+				self.menu.current_deus += 1
+				self.settings.god_bullet_off = False
+				self.settings.bullet_color = (255, 215, 0)
+				pygame.mixer.Sound.play(self.purchase_sound)
+			else:
+				pygame.mixer.Sound.play(self.deny_sound)
+				
+	def _check_sspd_button(self, mouse_pos):
+		'''Purchases bullet firing speed upgrade'''
+		
+		sspd_button_clicked = self.menu.sspd_rect.collidepoint(mouse_pos)
+		
+		if self.menu.pu_check and sspd_button_clicked and self.menu.current_sspd == 0:
+			if self._check_creds(5000):
+				self.stats.creds -= 5000
+				self.menu.current_sspd += 1
+				self.settings.ship_multi = 700.0
+				self.settings.ship_type = 1
+				pygame.mixer.Sound.play(self.purchase_sound)
+			else:
+				pygame.mixer.Sound.play(self.deny_sound)
+		elif self.menu.pu_check and sspd_button_clicked and self.menu.current_sspd == 1:
+			if self._check_creds(20000):
+				self.stats.creds -= 20000
+				self.menu.current_sspd += 1
+				self.settings.ship_multi = 1000.0
+				self.settings.ship_type = 2
+				pygame.mixer.Sound.play(self.purchase_sound)
+			else:
+				pygame.mixer.Sound.play(self.deny_sound)
+				
+	def _check_sfrm_button(self, mouse_pos):
+		'''Purchases deus bullets upgrade'''
+		
+		sfrm_button_clicked = self.menu.sfrm_rect.collidepoint(mouse_pos)
+		
+		if self.menu.pu_check and sfrm_button_clicked and self.menu.current_sfrm == 0:
+			if self._check_creds(500000):
+				self.stats.creds -= 500000
+				self.menu.current_sfrm += 1
+				self.settings.shipfrm = True
+				pygame.mixer.Sound.play(self.purchase_sound)
+			else:
+				pygame.mixer.Sound.play(self.deny_sound)
+				
+	def _check_bc_button(self, mouse_pos):
+		'''Purchases bullet capacity upgrade'''
+		
+		bc_button_clicked = self.menu.bc_rect.collidepoint(mouse_pos)
+		
+		if self.menu.pu_check and bc_button_clicked and self.menu.current_bc == 0:
+			if self._check_creds(7500):
+				self.stats.creds -= 7500
+				self.menu.current_bc += 1
+				self.settings.bullets_allowed = 5
+				pygame.mixer.Sound.play(self.purchase_sound)
+			else:
+				pygame.mixer.Sound.play(self.deny_sound)
+		elif self.menu.pu_check and bc_button_clicked and self.menu.current_bc == 1:
+			if self._check_creds(20000):
+				self.stats.creds -= 20000
+				self.menu.current_bc += 1
+				self.settings.bullets_allowed = 999
 				pygame.mixer.Sound.play(self.purchase_sound)
 			else:
 				pygame.mixer.Sound.play(self.deny_sound)
@@ -283,7 +410,7 @@ class AlienInvasion:
 		
 		elife_button_clicked = self.menu.elife_rect.collidepoint(mouse_pos)
 		
-		if elife_button_clicked and self.menu.current_elife == 0:
+		if self.menu.pu_check and elife_button_clicked and self.menu.current_elife == 0:
 			if self._check_creds(10000):
 				self.stats.creds -= 10000
 				self.menu.current_elife += 1
@@ -291,7 +418,7 @@ class AlienInvasion:
 				pygame.mixer.Sound.play(self.purchase_sound)
 			else:
 				pygame.mixer.Sound.play(self.deny_sound)
-		elif elife_button_clicked and self.menu.current_elife == 1:
+		elif self.menu.pu_check and elife_button_clicked and self.menu.current_elife == 1:
 			if self._check_creds(30000):
 				self.stats.creds -= 30000
 				self.menu.current_elife += 1
@@ -299,7 +426,7 @@ class AlienInvasion:
 				pygame.mixer.Sound.play(self.purchase_sound)
 			else:
 				pygame.mixer.Sound.play(self.deny_sound)
-		elif elife_button_clicked and self.menu.current_elife == 2:
+		elif self.menu.pu_check and elife_button_clicked and self.menu.current_elife == 2:
 			if self._check_creds(50000):
 				self.stats.creds -= 50000
 				self.settings.ship_lives += 1
@@ -343,6 +470,11 @@ class AlienInvasion:
 		if len(self.bullets) < self.settings.bullets_allowed and self.stats.game_active and (time() - self.prev_time) > self.settings.bullet_firing_speed:
 			new_bullet = Bullet(self)
 			self.bullets.add(new_bullet)
+			if self.settings.triple_shot:
+				left_bullet = LeftBullet(self)
+				right_bullet = RightBullet(self)
+				self.bullets.add(left_bullet)
+				self.bullets.add(right_bullet)
 			pygame.mixer.Sound.play(self.bullet_firing)
 			self.prev_time = time()
 			
@@ -355,6 +487,10 @@ class AlienInvasion:
 		#Get rid of bullets that have disappeared
 		for bullet in self.bullets.copy():
 			if bullet.rect.bottom <= 0:
+				self.bullets.remove(bullet)
+			if bullet.rect.left <= 0:
+				self.bullets.remove(bullet)
+			if bullet.rect.right >= self.screen_rect.right:
 				self.bullets.remove(bullet)
 		
 		#Respond to bullet-alien collisions
@@ -387,6 +523,7 @@ class AlienInvasion:
 				self.settings.alien_spd_multi += 10
 			if not self.rdcheck:
 				self.ship.center_ship()
+			self.ship.bottom_out()
 			self._create_fleet()
 			self.rdcheck = True
 				

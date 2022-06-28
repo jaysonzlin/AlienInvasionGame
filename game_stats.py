@@ -25,7 +25,7 @@ class GameStats:
 		self.high_score = 0
 		
 		#Space credits available for use on power-ups
-		self.creds = 150000
+		self.creds = 0
 		
 		#Round number
 		self.rd = 1
