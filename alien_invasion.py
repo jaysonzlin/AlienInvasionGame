@@ -241,6 +241,10 @@ class AlienInvasion:
 		if self.settings.ship_lives <= 0:
 			self.stats.game_active = False
 			self.start_check = False
+			#Plays main menu music
+			pygame.mixer.music.load('sounds/streets_of_passion.wav')
+			pygame.mixer.music.play(-1)
+			pygame.mixer.music.set_volume(0.3)
 		
 	def _fire_bullet(self):
 		'''Create a new bullet and add it to the bullets group.'''
@@ -278,6 +282,7 @@ class AlienInvasion:
 				if alien.lives <= 0:
 					pygame.mixer.Sound.play(self.alien_pop)
 					self.stats.score += alien.points
+					self.stats.creds += alien.points
 					alien.kill()
 		
 		if not self.aliens and self.ship.dead_check == False:

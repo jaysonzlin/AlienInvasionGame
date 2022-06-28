@@ -24,6 +24,9 @@ class GameStats:
 		#High score should never be reset
 		self.high_score = 0
 		
+		#Space credits available for use on power-ups
+		self.creds = 0
+		
 		#Round number
 		self.rd = 1
 		
