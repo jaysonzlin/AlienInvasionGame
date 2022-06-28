@@ -32,10 +32,10 @@ class Settings:
 		self.alien_lives = 1
 		self.alien_speed = 0.0
 		
-		self.alien_spd_multi = 250.0 
+		self.alien_spd_multi = 60.0 
 		self.alien_spd_cap = 250  #Alien speed cap
 		
-		self.fleet_drop_speed = 200
+		self.fleet_drop_speed = 20
 		
 		#fleet_direction of 1 represents right; -1 represents left
 		self.fleet_direction = 1

@@ -114,8 +114,7 @@ class Menu(Sprite):
 		self.bdmg_sprites = []
 		self.bdmg_sprites.append(pygame.image.load('images/dmgpu/bdmg3000.png'))
 		self.bdmg_sprites.append(pygame.image.load('images/dmgpu/bdmg10000.png'))
-		self.bdmg_sprites.append(pygame.image.load('images/dmgpu/bdmg50000.png'))
-		self.bdmg_sprites.append(pygame.image.load('images/completed.png'))		
+		self.bdmg_sprites.append(pygame.image.load('images/dmgpu/bdmg50000.png'))	
 		self.current_bdmg = 0
 		self.bdmg = self.bdmg_sprites[self.current_bdmg]
 		self.bdmg = pygame.transform.scale(self.bdmg,(150,150))
@@ -196,8 +195,7 @@ class Menu(Sprite):
 		self.elife_sprites = []
 		self.elife_sprites.append(pygame.image.load('images/utilpu/extralife10000.png'))
 		self.elife_sprites.append(pygame.image.load('images/utilpu/extralife30000.png'))
-		self.elife_sprites.append(pygame.image.load('images/utilpu/extralife50000.png'))
-		self.elife_sprites.append(pygame.image.load('images/completed.png'))		
+		self.elife_sprites.append(pygame.image.load('images/utilpu/extralife50000.png'))		
 		self.current_elife = 0
 		self.elife = self.elife_sprites[self.current_elife]
 		self.elife = pygame.transform.scale(self.elife,(150,150))
@@ -241,6 +239,24 @@ class Menu(Sprite):
 		
 		elif self.pu_check:
 			#Generates Power-Up Menu
+		
+			self.bdmg = self.bdmg_sprites[self.current_bdmg]
+			self.bdmg = pygame.transform.scale(self.bdmg,(150,150))
+			self.bspd = self.bspd_sprites[self.current_bspd]
+			self.bspd = pygame.transform.scale(self.bspd,(150,150))
+			self.ts = self.ts_sprites[self.current_ts]
+			self.ts = pygame.transform.scale(self.ts,(150,150))
+			self.deus = self.deus_sprites[self.current_deus]
+			self.deus = pygame.transform.scale(self.deus,(150,150))
+			self.sspd = self.sspd_sprites[self.current_sspd]
+			self.sspd = pygame.transform.scale(self.sspd,(150,150))
+			self.sfrm = self.sfrm_sprites[self.current_sfrm]
+			self.sfrm = pygame.transform.scale(self.sfrm,(150,150))
+			self.bc = self.bc_sprites[self.current_bc]
+			self.bc = pygame.transform.scale(self.bc,(150,150))
+			self.elife = self.elife_sprites[self.current_elife]
+			self.elife = pygame.transform.scale(self.elife,(150,150))
+			
 			self.screen.blit(self.pumenu_button, self.pumenu_rect)
 			self.screen.blit(self.creds_image, self.creds_rect)
 			self.screen.blit(self.bdmg, self.bdmg_rect)

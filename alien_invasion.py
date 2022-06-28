@@ -41,6 +41,8 @@ class AlienInvasion:
 		self.back_sound = pygame.mixer.Sound('sounds/back_sound.wav')
 		self.play_sound = pygame.mixer.Sound('sounds/play_sound.wav')
 		self.play_sound.set_volume(0.5)
+		self.purchase_sound = pygame.mixer.Sound('sounds/purchase.wav')
+		self.deny_sound = pygame.mixer.Sound('sounds/deny.wav')
 		
 		#Background Music (Work in progress); probably better to play the music directly since it work correctly in a loop
 		#Plays outside the game
@@ -78,7 +80,7 @@ class AlienInvasion:
 		
 		while True:
 			self._check_events()
-			
+			print(self.settings.ship_lives)
 			if self.stats.game_active:	
 				self.ship.update()					
 				self.stats.update()
@@ -86,7 +88,6 @@ class AlienInvasion:
 				self._update_bullets()
 			
 			self._update_screen()
-			
 			
 	def _check_events(self):
 		'''Respond to keypresses and mouse events.'''
@@ -121,6 +122,30 @@ class AlienInvasion:
 				#Back Button
 				elif ((x in range(20, 103) and (y in range(20, 77)))) and (self.menu.htp_check or self.menu.credits_check):
 					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)		
+				#Bullet Dmg Slot
+				elif ((x in range(150, 300)) and (y in range(180, 330))) and self.menu.pu_check:
+					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)	
+				#Bullet Spd Slot
+				elif ((x in range(335, 485)) and (y in range(180, 330))) and self.menu.pu_check:
+					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)	
+				#Triple Shot Slot
+				elif ((x in range(515, 665)) and (y in range(180, 330))) and self.menu.pu_check:
+					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)	
+				#Deus Bullets Slot
+				elif ((x in range(700, 850)) and (y in range(180, 330))) and self.menu.pu_check:
+					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)	
+				#Ship Spd Slot
+				elif ((x in range(150, 300)) and (y in range(420, 570))) and self.menu.pu_check:
+					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)	
+				#Ship Full Range Movement Slot
+				elif ((x in range(335, 485)) and (y in range(420, 570))) and self.menu.pu_check:
+					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)	
+				#Bullet Capacity Slot
+				elif ((x in range(515, 665)) and (y in range(420, 570))) and self.menu.pu_check:
+					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)	
+				#Extra Life Slot
+				elif ((x in range(700, 850)) and (y in range(420, 570))) and self.menu.pu_check:
+					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)	
 				else:
 					pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 				
@@ -130,6 +155,31 @@ class AlienInvasion:
 				self._check_htp_button(mouse_pos)
 				self._check_credits_button(mouse_pos)
 				self._check_back_button(mouse_pos)
+				self._check_bdmg_button(mouse_pos)
+				self._check_elife_button(mouse_pos)
+				
+	def _check_keydown_events(self, event):
+		'''Respond to keypresses.'''
+		
+		if event.key == pygame.K_RIGHT:
+			self.ship.moving_right = True
+		elif event.key == pygame.K_LEFT:
+			self.ship.moving_left = True
+		elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
+			sys.exit()
+		#Toggles off and on the powerup menu
+		elif event.key == pygame.K_p and self.start_check:
+			self.stats.game_active = not self.stats.game_active
+			self.menu.pu_check = not self.menu.pu_check
+			self.stats.time_counter = 0
+			
+	def _check_keyup_events(self, event):
+		'''Respond to key releases'''
+		
+		if event.key == pygame.K_RIGHT:
+			self.ship.moving_right = False
+		elif event.key == pygame.K_LEFT:
+			self.ship.moving_left = False
 			
 	def _check_play_button(self, mouse_pos):
 		'''Start a new game when the player clicks Play'''
@@ -192,30 +242,71 @@ class AlienInvasion:
 			pygame.mixer.Sound.play(self.back_sound)
 			self.menu.htp_check = False
 			self.menu.credits_check = False
+	
+	def _check_creds(self, cost):
+		'''Checks that player has enough currency to purchase power up'''
+		
+		if self.stats.creds >= cost:
+			return True
 					
-	def _check_keydown_events(self, event):
-		'''Respond to keypresses.'''
+	def _check_bdmg_button(self, mouse_pos):
+		'''Purchases bullet damage upgrade'''
 		
-		if event.key == pygame.K_RIGHT:
-			self.ship.moving_right = True
-		elif event.key == pygame.K_LEFT:
-			self.ship.moving_left = True
-		elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
-			sys.exit()
-		#Toggles off and on the powerup menu
-		elif event.key == pygame.K_p and self.start_check:
-			self.stats.game_active = not self.stats.game_active
-			self.menu.pu_check = not self.menu.pu_check
-			self.stats.time_counter = 0
-			
-	def _check_keyup_events(self, event):
-		'''Respond to key releases'''
+		bdmg_button_clicked = self.menu.bdmg_rect.collidepoint(mouse_pos)
 		
-		if event.key == pygame.K_RIGHT:
-			self.ship.moving_right = False
-		elif event.key == pygame.K_LEFT:
-			self.ship.moving_left = False
-			
+		if bdmg_button_clicked and self.menu.current_bdmg == 0:
+			if self._check_creds(3000):
+				self.stats.creds -= 3000
+				self.menu.current_bdmg += 1
+				self.settings.bullet_power += 2
+				pygame.mixer.Sound.play(self.purchase_sound)
+			else:
+				pygame.mixer.Sound.play(self.deny_sound)
+		elif bdmg_button_clicked and self.menu.current_bdmg == 1:
+			if self._check_creds(10000):
+				self.stats.creds -= 10000
+				self.menu.current_bdmg += 1
+				self.settings.bullet_power += 2
+				pygame.mixer.Sound.play(self.purchase_sound)
+			else:
+				pygame.mixer.Sound.play(self.deny_sound)
+		elif bdmg_button_clicked and self.menu.current_bdmg == 2:
+			if self._check_creds(50000):
+				self.stats.creds -= 50000
+				self.settings.bullet_power += 2
+				pygame.mixer.Sound.play(self.purchase_sound)
+			else:
+				pygame.mixer.Sound.play(self.deny_sound)
+				
+	def _check_elife_button(self, mouse_pos):
+		'''Purchases an extra life'''
+		
+		elife_button_clicked = self.menu.elife_rect.collidepoint(mouse_pos)
+		
+		if elife_button_clicked and self.menu.current_elife == 0:
+			if self._check_creds(10000):
+				self.stats.creds -= 10000
+				self.menu.current_elife += 1
+				self.settings.ship_lives += 1
+				pygame.mixer.Sound.play(self.purchase_sound)
+			else:
+				pygame.mixer.Sound.play(self.deny_sound)
+		elif elife_button_clicked and self.menu.current_elife == 1:
+			if self._check_creds(30000):
+				self.stats.creds -= 30000
+				self.menu.current_elife += 1
+				self.settings.ship_lives += 1
+				pygame.mixer.Sound.play(self.purchase_sound)
+			else:
+				pygame.mixer.Sound.play(self.deny_sound)
+		elif elife_button_clicked and self.menu.current_elife == 2:
+			if self._check_creds(50000):
+				self.stats.creds -= 50000
+				self.settings.ship_lives += 1
+				pygame.mixer.Sound.play(self.purchase_sound)
+			else:
+				pygame.mixer.Sound.play(self.deny_sound)
+					
 	def _ship_hit(self):
 		'''Respond to the ship being hit by an alien'''
 		
