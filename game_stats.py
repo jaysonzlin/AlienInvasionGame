@@ -27,13 +27,18 @@ class GameStats:
 		#Space credits available for use on power-ups
 		self.creds = 0
 		
+		#Cheat code
+		self.cheat = 0
+		
 		#Round number
 		self.rd = 1
 		
 	def reset_stats(self):
 		'''Initialize statistics that can change during the game'''
 		
+		#Reset game back to base
 		self.settings.ship_lives = 4
+		self.settings.alien_spd_multi = 60.0
 		self.score = 0
 		self.time_counter = 0
 		self.rd = 1

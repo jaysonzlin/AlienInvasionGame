@@ -82,11 +82,45 @@ class Menu(Sprite):
 		#Credits Button
 		self.credits_button = pygame.image.load('images/credits.png')
 		self.credits_button = pygame.transform.scale(self.credits_button, (self.button_width, self.button_height))
-		#Credits button rect
+		#Credits button rect on Main Menu
 		self.credits_rect = self.credits_button.get_rect()
 		self.credits_rect.right = self.screen_rect.right - 150
 		self.credits_rect.bottom = self.screen_rect.bottom - 150
-
+		
+		#Credit button rect on Credits screen
+		self.credits_button2 = pygame.image.load('images/credits.png')
+		self.credits_button2 = pygame.transform.scale(self.credits_button2, (239.25, 79.5))
+		self.credits_rect2 = self.credits_button.get_rect()
+		self.credits_rect2.left = self.screen_rect.left + 380
+		self.credits_rect2.top = self.screen_rect.top + 130
+		
+		#Creator Credit
+		self.me_button = pygame.image.load('images/credits/me.png')
+		self.me_button = pygame.transform.scale(self.me_button, (250, 48))
+		self.me_rect = self.me_button.get_rect()
+		self.me_rect.left = self.me_rect.left + 375
+		self.me_rect.top = self.screen_rect.top + 250
+		
+		#Taito Corp Credit
+		self.taito_button = pygame.image.load('images/credits/taito.png')
+		self.taito_button = pygame.transform.scale(self.taito_button, (250, 79))
+		self.taito_rect = self.taito_button.get_rect()
+		self.taito_rect.left = self.taito_rect.left + 375
+		self.taito_rect.top = self.screen_rect.top + 325
+		
+		#The Pillows Credit
+		self.flcl_button = pygame.image.load('images/credits/flcl.png')
+		self.flcl_button = pygame.transform.scale(self.flcl_button, (250, 70.5))
+		self.flcl_rect = self.flcl_button.get_rect()
+		self.flcl_rect.left = self.flcl_rect.left + 375
+		self.flcl_rect.top = self.screen_rect.top + 425
+		
+		#d.notive Credit
+		self.streets_button = pygame.image.load('images/credits/streets.png')
+		self.streets_button = pygame.transform.scale(self.streets_button, (250, 70.5))
+		self.streets_rect = self.streets_button.get_rect()
+		self.streets_rect.left = self.streets_rect.left + 375
+		self.streets_rect.top = self.screen_rect.top + 525
 ##########################################################################################################################
 		
 		#Back Button
@@ -234,6 +268,11 @@ class Menu(Sprite):
 		elif self.credits_check:
 			#Generates Credits Menu
 			self.screen.fill(self.settings.bg_color, self.screen_rect)
+			self.screen.blit(self.credits_button2, self.credits_rect2)
+			self.screen.blit(self.me_button, self.me_rect)
+			self.screen.blit(self.taito_button, self.taito_rect)
+			self.screen.blit(self.flcl_button, self.flcl_rect)
+			self.screen.blit(self.streets_button, self.streets_rect)
 			self.screen.blit(self.back_button, self.back_rect)
 			#placeholder for credits sprite
 		

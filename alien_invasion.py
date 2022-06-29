@@ -78,6 +78,9 @@ class AlienInvasion:
 		
 		while True:
 			self._check_events()
+			
+			print(self.stats.cheat)
+			
 			if self.stats.game_active:	
 				self.ship.update()					
 				self.stats.update()
@@ -154,6 +157,12 @@ class AlienInvasion:
 				self._check_htp_button(mouse_pos)
 				self._check_credits_button(mouse_pos)
 				self._check_back_button(mouse_pos)
+				###Credits Menu (Cheat code)
+				self._check_credits_button2(mouse_pos)
+				self._check_me_button(mouse_pos)
+				self._check_taito_button(mouse_pos)
+				self._check_flcl_button(mouse_pos)
+				self._check_streets_button(mouse_pos)
 				###Power-Up Menu
 				##Top Row
 				self._check_bdmg_button(mouse_pos)
@@ -248,6 +257,49 @@ class AlienInvasion:
 			pygame.mixer.Sound.play(self.back_sound)
 			self.menu.credits_check = True
 			
+	def _check_credits_button2(self, mouse_pos):
+		'''Activates cheat to give 999999 space credits'''
+		
+		credits_button2_clicked = self.menu.credits_rect2.collidepoint(mouse_pos)
+		
+		if credits_button2_clicked and self.menu.credits_check:
+			if self.stats.cheat == 99:
+				self.stats.creds = 999999
+			else:
+				self.stats.cheat = 0
+			
+	def _check_me_button(self,mouse_pos):
+		'''Increments cheat code by 1'''
+		
+		me_button_clicked = self.menu.me_rect.collidepoint(mouse_pos)
+		
+		if me_button_clicked and self.menu.credits_check:
+			self.stats.cheat += 1
+			
+	def _check_taito_button(self,mouse_pos):
+		'''Increments cheat code by 5'''
+		
+		taito_button_clicked = self.menu.taito_rect.collidepoint(mouse_pos)
+		
+		if taito_button_clicked and self.menu.credits_check:
+			self.stats.cheat += 5
+			
+	def _check_flcl_button(self,mouse_pos):
+		'''Increments cheat code by 10'''
+		
+		flcl_button_clicked = self.menu.flcl_rect.collidepoint(mouse_pos)
+		
+		if flcl_button_clicked and self.menu.credits_check:
+			self.stats.cheat += 10
+			
+	def _check_streets_button(self,mouse_pos):
+		'''Increments cheat code by 25'''
+		
+		streets_button_clicked = self.menu.streets_rect.collidepoint(mouse_pos)
+		
+		if streets_button_clicked and self.menu.credits_check:
+			self.stats.cheat += 25	
+		
 	def _check_back_button(self, mouse_pos):
 		'''Brings player back to main menu'''
 		
@@ -322,8 +374,8 @@ class AlienInvasion:
 		ts_button_clicked = self.menu.ts_rect.collidepoint(mouse_pos)
 		
 		if self.menu.pu_check and ts_button_clicked and self.menu.current_ts == 0:
-			if self._check_creds(500000):
-				self.stats.creds -= 500000
+			if self._check_creds(33333):
+				self.stats.creds -= 33333
 				self.menu.current_ts += 1
 				self.settings.triple_shot = True
 				pygame.mixer.Sound.play(self.purchase_sound)
@@ -375,8 +427,8 @@ class AlienInvasion:
 		sfrm_button_clicked = self.menu.sfrm_rect.collidepoint(mouse_pos)
 		
 		if self.menu.pu_check and sfrm_button_clicked and self.menu.current_sfrm == 0:
-			if self._check_creds(500000):
-				self.stats.creds -= 500000
+			if self._check_creds(15000):
+				self.stats.creds -= 15000
 				self.menu.current_sfrm += 1
 				self.settings.shipfrm = True
 				pygame.mixer.Sound.play(self.purchase_sound)
