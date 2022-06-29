@@ -140,6 +140,14 @@ class Menu(Sprite):
 		self.pumenu_rect = self.pumenu_button.get_rect()
 		self.pumenu_rect.center = self.screen_rect.center
 		
+		#Home Button
+		self.home_button = pygame.image.load('images/home.png')
+		self.home_button = pygame.transform.scale(self.home_button, (50, 50))
+		#Home Button Rect
+		self.home_rect = self.home_button.get_rect()
+		self.home_rect.right = self.screen_rect.right - 120
+		self.home_rect.top = self.screen_rect.top + 125
+		
 		#Font settings for power-up menu space credits
 		self.text_color = (255, 255, 255)
 		self.font = pygame.font.SysFont('impact', 28)
@@ -278,7 +286,7 @@ class Menu(Sprite):
 		
 		elif self.pu_check:
 			#Generates Power-Up Menu
-		
+			
 			self.bdmg = self.bdmg_sprites[self.current_bdmg]
 			self.bdmg = pygame.transform.scale(self.bdmg,(150,150))
 			self.bspd = self.bspd_sprites[self.current_bspd]
@@ -297,6 +305,7 @@ class Menu(Sprite):
 			self.elife = pygame.transform.scale(self.elife,(150,150))
 			
 			self.screen.blit(self.pumenu_button, self.pumenu_rect)
+			self.screen.blit(self.home_button, self.home_rect)
 			self.screen.blit(self.creds_image, self.creds_rect)
 			self.screen.blit(self.bdmg, self.bdmg_rect)
 			self.screen.blit(self.bspd, self.bspd_rect)

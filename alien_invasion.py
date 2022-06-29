@@ -164,6 +164,7 @@ class AlienInvasion:
 				self._check_flcl_button(mouse_pos)
 				self._check_streets_button(mouse_pos)
 				###Power-Up Menu
+				self._check_home_button(mouse_pos)
 				##Top Row
 				self._check_bdmg_button(mouse_pos)
 				self._check_bspd_button(mouse_pos)
@@ -206,6 +207,8 @@ class AlienInvasion:
 		elif event.key == pygame.K_DOWN:
 			self.ship.moving_down = False
 			
+##########################################################################################################################	
+		
 	def _check_play_button(self, mouse_pos):
 		'''Start a new game when the player clicks Play'''
 		
@@ -257,6 +260,8 @@ class AlienInvasion:
 			pygame.mixer.Sound.play(self.back_sound)
 			self.menu.credits_check = True
 			
+##########################################################################################################################
+			
 	def _check_credits_button2(self, mouse_pos):
 		'''Activates cheat to give 999999 space credits'''
 		
@@ -300,6 +305,8 @@ class AlienInvasion:
 		if streets_button_clicked and self.menu.credits_check:
 			self.stats.cheat += 25	
 		
+##########################################################################################################################
+		
 	def _check_back_button(self, mouse_pos):
 		'''Brings player back to main menu'''
 		
@@ -311,11 +318,24 @@ class AlienInvasion:
 			self.menu.htp_check = False
 			self.menu.credits_check = False
 	
+##########################################################################################################################
+	
 	def _check_creds(self, cost):
 		'''Checks that player has enough currency to purchase power up'''
 		
 		if self.stats.creds >= cost:
 			return True
+		
+	def _check_home_button(self,mouse_pos):
+		'''Returns player back to main menu if home button is pressed'''
+		
+		home_button_clicked = self.menu.home_rect.collidepoint(mouse_pos)
+		
+		if self.menu.pu_check and home_button_clicked:
+			self.settings.ship_lives = 0
+			self._ship_hit()
+			self.menu.pu_check = False
+			
 					
 	def _check_bdmg_button(self, mouse_pos):
 		'''Purchases bullet damage upgrade'''
@@ -485,6 +505,8 @@ class AlienInvasion:
 				pygame.mixer.Sound.play(self.purchase_sound)
 			else:
 				pygame.mixer.Sound.play(self.deny_sound)
+					
+##########################################################################################################################
 					
 	def _ship_hit(self):
 		'''Respond to the ship being hit by an alien'''
