@@ -1,5 +1,6 @@
 # Alien Annihilation
-Recreation of Space Invaders with twists
+## Space Invaders Remade
+Annihilate Aliens! Power up your ship! 
 
 ## Necessary Downloads
 * python
