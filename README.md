@@ -10,9 +10,9 @@ Start as a humble cyan ship constructed to the original Space Invader ship stand
 * Press Q or ESC to quit the game
 
 ## Download Requirements / Steps
-* Python 3.9.6 (minimum)  
+* Python 3.9.6  (Using older version because Python 3.10.5 does not support Pygame as of making this game)
 To download Python, go to https://www.python.org/downloads/ to download Python
-* Pygame 1.9.6 (minimum)  
+* Pygame 2.1.2
 To download Pygame, go to your terminal and type  
 pip install pygame  
   
