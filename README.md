@@ -25,7 +25,7 @@ Cheers!
 
 ## Cheat Code
 Hey, don't cheat!  
-What, you want to see all the upgrades but don't have time to play the game.  
+What, you want to see all the upgrades but don't have time to play the game?  
 Fine...........  
 Go to the Credits screen.  
 Click the 5th credit bubble three times, the 4rd credit bubble two times, and the 2nd credit bubble four times.  
