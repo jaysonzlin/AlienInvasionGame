@@ -191,6 +191,7 @@ class AlienInvasion:
 		elif event.key == pygame.K_p and self.start_check:
 			self.stats.game_active = not self.stats.game_active
 			self.menu.pu_check = not self.menu.pu_check
+			pygame.mixer.Sound.play(self.back_sound)
 			self.stats.time_counter = 0
 			
 	def _check_keyup_events(self, event):
