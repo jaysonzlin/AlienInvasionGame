@@ -334,8 +334,8 @@ class AlienInvasion:
 			self.settings.ship_lives = 0
 			self._ship_hit()
 			self.menu.pu_check = False
+			self.rdcheck = True
 			
-					
 	def _check_bdmg_button(self, mouse_pos):
 		'''Purchases bullet damage upgrade'''
 		
@@ -608,6 +608,7 @@ class AlienInvasion:
 		#Spacing between each alien is equal to one alien width
 		if (self.stats.rd % 3) == 1:
 			alien = invader1(self)
+			print(self.rdcheck)
 		if (self.stats.rd % 3) == 2:
 			alien = invader2(self)
 		if (self.stats.rd % 3) == 0:
