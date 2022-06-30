@@ -18,7 +18,7 @@ I've always wanted to make my own game from scratch even if it would simple, and
 What separates this game from the other Space Invader clones? First, this project is more complex than the typical build-your-first-game Space Invaders, as it utilizes timers to for sprite animations and frame rate independent movement of characters. Furthermore, the concept of the game has also changed to be a more casual endless runner game. Finally, there is a sleek power-up menu, intro screen, and more. All of this totaling to over 1500 lines of code. While the code was much cleaner at the start, multiple bug fixes + lines of code later left behind a messy but full operational game. The code could definitely be more efficiently written, but that will be something to look for in the future!
 
 Takeaways:
-With this project, I've grown an appreciation for game developers everywhere. Programming this gave a lot of practice for me with Git, Pygame, OOP, and killer graphic design + Photoshop skills on the fly haha. 
+With this project, I've grown an appreciation for game developers everywhere. Programming this gave a lot of practice for me with Git, Pygame, OOP, and killer graphic design + Photoshop skills on the fly. 
 The big takeaway I have is that it is 100% true that code gets ridiculously harder to work with the longer it is. I remember fixing early-stage bugs with a few lines, only for those to be made into a joke by late-stage bugs which usually involved multiple fixes in all parts of the program.
 
 Cheers!
