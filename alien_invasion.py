@@ -79,8 +79,6 @@ class AlienInvasion:
 		while True:
 			self._check_events()
 			
-			print(self.stats.cheat)
-			
 			if self.stats.game_active:	
 				self.ship.update()					
 				self.stats.update()
