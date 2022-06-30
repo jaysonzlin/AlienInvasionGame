@@ -24,7 +24,7 @@ The big takeaway I have is that it is 100% true that code gets ridiculously hard
 Cheers!
 
 ## Cheat Code
-Hey, don't cheat! 
+Hey, don't cheat! \n
 What, you want to see all the upgrades but don't have time to play the game. 
 Fine...........
 Go to the Credits screen. 
