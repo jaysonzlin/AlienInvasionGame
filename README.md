@@ -1,6 +1,6 @@
 # Alien Annihilation
 ## Space Invaders Remade  
-[![Alien Annihilation](https://img.youtube.com/vi/FZRjruKddws/0.jpg)](https://www.youtube.com/watch?v=FZRjruKddws)  <img src="images/gameplay.png" width = '500'>
+[![Alien Annihilation](https://img.youtube.com/vi/FZRjruKddws/0.jpg)](https://www.youtube.com/watch?v=FZRjruKddws)  <img src="images/gameplay.png" width = '500'>  
 https://youtu.be/FZRjruKddws
   
 Annihilate Aliens! Power up your ship! Enjoy this casual endless runner game built off of Space Invaders!
