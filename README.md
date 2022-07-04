@@ -2,6 +2,7 @@
 ## Space Invaders Remade  
 [![Alien Annihilation](https://img.youtube.com/vi/FZRjruKddws/0.jpg)](https://www.youtube.com/watch?v=FZRjruKddws)  
 https://youtu.be/FZRjruKddws
+<img src="images/gameplay.PNG" width = '500'>
   
 Annihilate Aliens! Power up your ship! Enjoy this casual endless runner game built off of Space Invaders!
 Start as a humble cyan ship constructed to the original Space Invader ship standards and upgrade to a battleship. Power-Ups include classic upgrades such as increased bullet damage, extra lives, increased bullet capacity, and boosted speed. Additionally, your ship's internal guns can be upgraded to fire as fast as a gatling gun to maybe even a laser cannon. Finally, there are the additions of newer unconventional power-ups. First, you have the opportunity to break free from the left-right movement of Space Invaders and fly in all directions. Second, you have the ingenius mechanism to triple your shots which triple your alien annihilation! And, finally, you have access to the mysterious Deus Bullets that strike down anything they touch.
