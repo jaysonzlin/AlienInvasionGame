@@ -589,7 +589,7 @@ class AlienInvasion:
 			#Destroy existing bullets, increment the round, and create new fleet
 			self.bullets.empty()
 			sleep(0.05)
-			if self.rdcheck:
+			if self.rdcheck or self.stats.rd == 1:
 				self.stats.rd += 1 
 				#For every new round, add a life point to all aliens and increase their speed
 				self.settings.alien_lives += 1
