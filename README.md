@@ -1,7 +1,7 @@
 # Alien Annihilation
 ## Space Invaders Remade  
 [![Alien Annihilation](https://img.youtube.com/vi/FZRjruKddws/0.jpg)](https://www.youtube.com/watch?v=FZRjruKddws)  <img src="images/gameplay.png" width = '500'>  
-<img src="images/gameplay_menu.png" width = '500'>  <img src="images/gameplay_max.png" width = '500'>  
+<img src="images/gameplay_menu.png" width = '500'>  <img src="images/gameplay_flight.png" width = '500'>  <img src="images/gameplay_max.png" width = '500'>  
 https://youtu.be/FZRjruKddws
   
 **Playable Now!!!! https://astro9811.itch.io/alien-annihilation** 
